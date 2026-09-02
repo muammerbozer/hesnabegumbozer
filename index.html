@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Okul Yönetim Sistemi - Öğrenme Köşesi</title>
     <!-- Tailwind CSS CDN -->
-    <script type="text/javascript" src="https://me.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=UpL887WD4AZ_jdHUG_5VyOt_E9fgePax1WLffQni36VSYX8gx_RorPJrGHdSWj9P_Ssf93BTYVTp-_A3tDo6GVnRifW9SJSP3uo38_OUCtFSzAtsICQK3TC4D4tFZJZ2UQkWW4Ij2MlivJkPuBRjxkzdyB9f8UowoPBEQyzIIjl0GRxo5IY1mLs1LNv08mwXSM1Lxb_r__aGCqx4pnnuv-zY4wBqO9NZIFLFPxpUAyTL9VcnYpGCMkGNw4a1gYO0GNlR26qMyVVZlGfqAAmdM5HCuYcibx2HDbELTTo9f1b7FH8UOZBRTUptNLIUf7rGeO6Ta6co0DikmBKerUGy_g" charset="UTF-8"></script><script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <!-- html2pdf.js CDN for A5 PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <!-- FontAwesome Icons -->
@@ -35,7 +35,7 @@
     <header class="bg-gradient-to-r from-indigo-800 via-indigo-700 to-blue-800 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex justify-between items-center">
             
-            <!-- Mobile Menu Toggle Button (Left aligned on mobile) -->
+            <!-- Mobile Menu Toggle Button -->
             <div class="flex items-center gap-3">
                 <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-indigo-100 hover:text-white hover:bg-white/10 rounded-lg transition" title="Menü">
                     <i class="fa-solid fa-bars text-xl"></i>
@@ -84,6 +84,9 @@
             <button onclick="switchTab('courses'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
                 <i class="fa-solid fa-book-open w-5 text-indigo-500"></i> Dersler
             </button>
+            <button onclick="switchTab('schedule'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
+                <i class="fa-solid fa-calendar-days w-5 text-indigo-500"></i> Ders Programı
+            </button>
             <button onclick="switchTab('students'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
                 <i class="fa-solid fa-user-graduate w-5 text-indigo-500"></i> Öğrenciler
             </button>
@@ -100,22 +103,25 @@
     <nav class="hidden md:block bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex space-x-1 py-2">
-                <button onclick="switchTab('home')" id="tab-home" class="nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 bg-indigo-600 text-white shadow-sm">
+                <button onclick="switchTab('home')" id="tab-home" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 bg-indigo-600 text-white shadow-sm">
                     <i class="fa-solid fa-house"></i> Ana Sayfa
                 </button>
-                <button onclick="switchTab('school')" id="tab-school" class="nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('school')" id="tab-school" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
                     <i class="fa-solid fa-school"></i> Okul Bilgileri
                 </button>
-                <button onclick="switchTab('classes')" id="tab-classes" class="nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('classes')" id="tab-classes" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
                     <i class="fa-solid fa-chalkboard-user"></i> Sınıflar
                 </button>
-                <button onclick="switchTab('courses')" id="tab-courses" class="nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('courses')" id="tab-courses" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
                     <i class="fa-solid fa-book-open"></i> Dersler
                 </button>
-                <button onclick="switchTab('students')" id="tab-students" class="nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('schedule')" id="tab-schedule" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                    <i class="fa-solid fa-calendar-days"></i> Ders Programı
+                </button>
+                <button onclick="switchTab('students')" id="tab-students" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
                     <i class="fa-solid fa-user-graduate"></i> Öğrenciler
                 </button>
-                <button onclick="switchTab('notes')" id="tab-notes" class="nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('notes')" id="tab-notes" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
                     <i class="fa-solid fa-clipboard-list"></i> Notlar & Değerlendirme
                 </button>
             </div>
@@ -127,13 +133,16 @@
 
         <!-- 1. HOME VIEW -->
         <section id="view-home" class="space-y-6">
+            
+            <!-- Welcome Header -->
             <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/80">
                 <div class="max-w-3xl">
                     <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 font-semibold text-xs rounded-full mb-3 border border-indigo-100">Tek Sayfa Okul Otomasyonu</span>
                     <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Eğitim Yönetim Portalına Hoş Geldiniz</h2>
-                    <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">Sınıf, ders, öğrenci ve not kaydı işlemlerinizi hızlıca gerçekleştirebilir; A5 boyutunda dikey PDF raporları oluşturabilirsiniz.</p>
+                    <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">Sınıf, ders, öğrenci, ders programı ve not kaydı işlemlerinizi hızlıca gerçekleştirebilir; A5 boyutunda dikey PDF raporları oluşturabilirsiniz.</p>
                 </div>
 
+                <!-- Stats Summary -->
                 <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
                     <div onclick="switchTab('classes')" class="cursor-pointer bg-slate-50 hover:bg-indigo-50/50 transition border border-slate-200 rounded-xl p-4 flex items-center gap-3">
                         <div class="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
@@ -176,6 +185,130 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Hızlı Erişim -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-bolt text-amber-500"></i> Hızlı Erişim
+                </h3>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <button onclick="switchTab('school')" class="p-3 border border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-sm text-left flex flex-col gap-1.5 bg-white transition">
+                        <i class="fa-solid fa-school text-indigo-600 text-base"></i>
+                        <span class="text-xs font-semibold text-slate-800">Okul Bilgileri</span>
+                    </button>
+                    <button onclick="switchTab('schedule')" class="p-3 border border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-sm text-left flex flex-col gap-1.5 bg-white transition">
+                        <i class="fa-solid fa-calendar-days text-emerald-600 text-base"></i>
+                        <span class="text-xs font-semibold text-slate-800">Ders Programı</span>
+                    </button>
+                    <button onclick="switchTab('students')" class="p-3 border border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-sm text-left flex flex-col gap-1.5 bg-white transition">
+                        <i class="fa-solid fa-user-plus text-amber-600 text-base"></i>
+                        <span class="text-xs font-semibold text-slate-800">Öğrenci Yönetimi</span>
+                    </button>
+                    <button onclick="switchTab('notes')" class="p-3 border border-slate-200 rounded-xl hover:border-indigo-500 hover:shadow-sm text-left flex flex-col gap-1.5 bg-white transition">
+                        <i class="fa-solid fa-clipboard-check text-purple-600 text-base"></i>
+                        <span class="text-xs font-semibold text-slate-800">Not Girişi</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Duyurular, Etkinlikler ve Eğitim Takvimi Gridi -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Duyurular Panel -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-indigo-600"></i> Okul Duyuruları
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-indigo-50/60 rounded-xl border border-indigo-100">
+                            <div class="flex items-center justify-between text-[10px] text-indigo-600 font-bold mb-1">
+                                <span>2026-2027 Yılı</span>
+                                <span>Eylül 2026</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-800">Sene Başı Öğretmenler Kurulu</h4>
+                            <p class="text-[11px] text-slate-600 mt-1">Sene başı kurul toplantısı gündem maddeleri ve kurul görev dağılımları yayınlandı.</p>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <div class="flex items-center justify-between text-[10px] text-slate-500 font-semibold mb-1">
+                                <span>Veli Toplantısı</span>
+                                <span>Ekim 2026</span>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-800">I. Dönem Veli Toplantısı</h4>
+                            <p class="text-[11px] text-slate-600 mt-1">Sınıf rehber öğretmenleri toplantı takvimlerini sisteme tanımlayabilirler.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Etkinlikler Panel -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-500"></i> Yaklaşan Etkinlikler
+                    </h3>
+                    <div class="space-y-2.5">
+                        <div class="flex items-center gap-3 p-2.5 border border-slate-100 rounded-xl hover:bg-slate-50 transition">
+                            <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-lg flex flex-col items-center justify-center font-bold text-xs shrink-0">
+                                <span>29</span>
+                                <span class="text-[8px] uppercase">Ekim</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">29 Ekim Cumhuriyet Bayramı</h4>
+                                <p class="text-[10px] text-slate-500">Okul kutlama töreni ve şiir yarışması</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2.5 border border-slate-100 rounded-xl hover:bg-slate-50 transition">
+                            <div class="w-10 h-10 bg-rose-100 text-rose-700 rounded-lg flex flex-col items-center justify-center font-bold text-xs shrink-0">
+                                <span>10</span>
+                                <span class="text-[8px] uppercase">Kasım</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">10 Kasım Atatürk'ü Anma</h4>
+                                <p class="text-[10px] text-slate-500">İlçe anma programı ve okul etkinlikleri</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2.5 border border-slate-100 rounded-xl hover:bg-slate-50 transition">
+                            <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-lg flex flex-col items-center justify-center font-bold text-xs shrink-0">
+                                <span>24</span>
+                                <span class="text-[8px] uppercase">Kasım</span>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800">24 Kasım Öğretmenler Günü</h4>
+                                <p class="text-[10px] text-slate-500">Öğretmenler günü okul kutlama programı</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Eğitim Öğretim Takvimi Panel -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-check text-emerald-600"></i> 2026-2027 Çalışma Takvimi
+                    </h3>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">Ders Başı (I. Dönem)</span>
+                            <span class="font-bold text-slate-900">14 Eylül 2026</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">I. Dönem Ara Tatil</span>
+                            <span class="font-bold text-slate-900">09-13 Kasım 2026</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">Yarıyıl (Sömestr) Tatili</span>
+                            <span class="font-bold text-slate-900">25 Ocak - 05 Şubat 2027</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">II. Dönem Ara Tatil</span>
+                            <span class="font-bold text-slate-900">05-09 Nisan 2027</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-slate-50 rounded-lg">
+                            <span class="font-medium text-slate-700">Ders Yılı Sonu (Kapanış)</span>
+                            <span class="font-bold text-slate-900">18 Haziran 2027</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </section>
 
         <!-- 2. SCHOOL VIEW -->
@@ -214,14 +347,14 @@
                             Sil
                         </button>
                         <button onclick="saveSchoolInfo()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg">
-                            Kaydet / Düzenle
+                            Kaydet
                         </button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 3. CLASSES VIEW (All inputs single-line layout) -->
+        <!-- 3. CLASSES VIEW -->
         <section id="view-classes" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
@@ -232,7 +365,7 @@
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <div class="flex flex-row items-center gap-2 overflow-x-auto whitespace-nowrap">
                         <input type="hidden" id="class-edit-id" value="">
-                        <input type="text" id="class-name-input" placeholder="Sınıf Adı (Örn: 8-A)" class="flex-grow min-w-[120px] px-3 py-1.5 border border-slate-300 rounded-lg text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <input type="text" id="class-name-input" placeholder="Sınıf Adı (Örn: 8-A)" class="flex-grow min-w-[140px] px-3 py-1.5 border border-slate-300 rounded-lg text-xs sm:text-sm focus:ring-2 focus:ring-indigo-500 outline-none">
                         
                         <button onclick="saveClass()" id="btn-save-class" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1 shrink-0">
                             <i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet
@@ -241,7 +374,7 @@
                             İptal
                         </button>
                         <button onclick="exportClassesPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1 shrink-0">
-                            <i class="fa-solid fa-file-pdf text-[10px]"></i> A5 PDF Yazdır
+                            <i class="fa-solid fa-print text-[10px]"></i> Yazdır
                         </button>
                     </div>
                 </div>
@@ -252,8 +385,8 @@
                         <thead>
                             <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
                                 <th class="py-2.5 px-3 w-12 text-center">Sıra</th>
-                                <th class="py-2.5 px-3">Sınıf Adı</th>
-                                <th class="py-2.5 px-3 w-32 text-center">İşlemler</th>
+                                <th class="py-2.5 px-3 whitespace-nowrap">Sınıf Adı</th>
+                                <th class="py-2.5 px-3 w-32 text-center whitespace-nowrap">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody id="class-table-body" class="divide-y divide-slate-100">
@@ -264,7 +397,7 @@
             </div>
         </section>
 
-        <!-- 4. COURSES VIEW (All inputs single-line layout) -->
+        <!-- 4. COURSES VIEW -->
         <section id="view-courses" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
@@ -292,8 +425,8 @@
                         <thead>
                             <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
                                 <th class="py-2.5 px-3 w-12 text-center">Sıra</th>
-                                <th class="py-2.5 px-3">Ders Adı</th>
-                                <th class="py-2.5 px-3 w-32 text-center">İşlemler</th>
+                                <th class="py-2.5 px-3 whitespace-nowrap">Ders Adı</th>
+                                <th class="py-2.5 px-3 w-32 text-center whitespace-nowrap">İşlemler</th>
                             </tr>
                         </thead>
                         <tbody id="course-table-body" class="divide-y divide-slate-100">
@@ -304,36 +437,82 @@
             </div>
         </section>
 
-        <!-- 5. STUDENTS VIEW (All inputs single-line layout) -->
-        <section id="view-students" class="hidden space-y-4">
+        <!-- 5. DERS PROGRAMI SAYFASI -->
+        <section id="view-schedule" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <div class="flex items-center justify-between gap-2 mb-3">
                     <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-user-graduate text-amber-600"></i> Öğrenci Yönetimi
+                        <i class="fa-solid fa-calendar-days text-indigo-600"></i> Haftalık Ders Programım
                     </h2>
-                    <button onclick="exportStudentsPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1 shrink-0">
-                        <i class="fa-solid fa-file-pdf text-[10px]"></i> A5 PDF Yazdır
+                    <button onclick="saveSchedule()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1 shrink-0">
+                        <i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet
                     </button>
                 </div>
 
-                <!-- SINGLE LINE INPUT CONTAINER FOR STUDENTS -->
-                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                <!-- Schedule Table -->
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="w-full text-center border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-indigo-900 text-white font-semibold">
+                                <th class="py-2.5 px-2 w-16 border-r border-indigo-800">Saat / Ders</th>
+                                <th class="py-2.5 px-2">Pazartesi</th>
+                                <th class="py-2.5 px-2">Salı</th>
+                                <th class="py-2.5 px-2">Çarşamba</th>
+                                <th class="py-2.5 px-2">Perşembe</th>
+                                <th class="py-2.5 px-2">Cuma</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schedule-table-body" class="divide-y divide-slate-200 bg-slate-50/50">
+                            <!-- Rendered dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. STUDENTS VIEW -->
+        <section id="view-students" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
+                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-user-graduate text-amber-600"></i> Öğrenci Yönetimi
+                </h2>
+
+                <!-- VERTICALLY STACKED INPUT BOX WITH BUTTONS IN SINGLE LINE AT BOTTOM -->
+                <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
                     <input type="hidden" id="student-edit-id" value="">
-                    <div class="flex flex-row items-center gap-2 overflow-x-auto whitespace-nowrap">
-                        <input type="text" id="student-first-name" placeholder="Adı" class="w-24 sm:w-32 px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500 outline-none shrink-0">
-                        <input type="text" id="student-last-name" placeholder="Soyadı" class="w-24 sm:w-32 px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500 outline-none shrink-0">
-                        
-                        <select id="student-class-select" class="w-24 sm:w-28 px-2 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500 outline-none bg-white shrink-0">
-                            <option value="">Sınıf Seç</option>
-                        </select>
+                    
+                    <!-- Text inputs stacked vertically -->
+                    <div class="space-y-2">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Öğrenci Adı</label>
+                            <input type="text" id="student-first-name" placeholder="Adı" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Öğrenci Soyadı</label>
+                            <input type="text" id="student-last-name" placeholder="Soyadı" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Sınıf</label>
+                            <select id="student-class-select" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                                <option value="">Sınıf Seçiniz</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-600 mb-0.5">Okul Numarası</label>
+                            <input type="text" id="student-number" placeholder="Okul Numarası" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs sm:text-sm focus:ring-2 focus:ring-amber-500 outline-none bg-white">
+                        </div>
+                    </div>
 
-                        <input type="text" id="student-number" placeholder="Okul No" class="w-16 sm:w-20 px-2 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-amber-500 outline-none shrink-0">
-
-                        <button onclick="saveStudent()" id="btn-save-student" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1 shrink-0">
+                    <!-- Action Buttons at bottom in SINGLE LINE -->
+                    <div class="flex items-center justify-end gap-2 pt-1 border-t border-slate-200">
+                        <button onclick="saveStudent()" id="btn-save-student" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
                             <i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet
                         </button>
-                        <button onclick="resetStudentForm()" class="px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-medium rounded-lg shrink-0">
+                        <button onclick="resetStudentForm()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-medium rounded-lg">
                             Temizle
+                        </button>
+                        <button onclick="exportStudentsPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-print text-[10px]"></i> Yazdır
                         </button>
                     </div>
                 </div>
@@ -353,11 +532,11 @@
                         <table class="w-full text-left border-collapse text-xs sm:text-sm">
                             <thead>
                                 <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
-                                    <th class="py-2.5 px-3 w-10 text-center">Sıra</th>
-                                    <th class="py-2.5 px-3">Ad Soyad</th>
-                                    <th class="py-2.5 px-3">Sınıf</th>
-                                    <th class="py-2.5 px-3">Okul No</th>
-                                    <th class="py-2.5 px-3 w-28 text-center">İşlemler</th>
+                                    <th class="py-2.5 px-3 w-10 text-center whitespace-nowrap">Sıra</th>
+                                    <th class="py-2.5 px-3 whitespace-nowrap">Adı Soyadı</th>
+                                    <th class="py-2.5 px-3 whitespace-nowrap">Sınıf</th>
+                                    <th class="py-2.5 px-3 whitespace-nowrap">Okul No</th>
+                                    <th class="py-2.5 px-3 w-28 text-center whitespace-nowrap">İşlemler</th>
                                 </tr>
                             </thead>
                             <tbody id="student-table-body" class="divide-y divide-slate-100">
@@ -369,7 +548,7 @@
             </div>
         </section>
 
-        <!-- 6. NOTES VIEW (Updated with 1.Y, 2.Y, 1.P, 2.P, PR, and Average inputs) -->
+        <!-- 7. NOTES VIEW -->
         <section id="view-notes" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <div class="flex items-center justify-between gap-2 mb-3">
@@ -377,7 +556,7 @@
                         <i class="fa-solid fa-clipboard-list text-purple-600"></i> Not & Değerlendirme Girişi
                     </h2>
                     <button onclick="exportNotesPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1 shrink-0">
-                        <i class="fa-solid fa-file-pdf text-[10px]"></i> A5 PDF Yazdır
+                        <i class="fa-solid fa-print text-[10px]"></i> Yazdır
                     </button>
                 </div>
 
@@ -422,7 +601,7 @@
         <p>© 2026 Okul Yönetim Otomasyonu - Öğrenme Köşesi</p>
     </footer>
 
-    <!-- HIDDEN CONTAINER FOR EXACT A5 VERTICAL PDF REPORT GENERATION -->
+    <!-- HIDDEN CONTAINER FOR A5 VERTICAL PDF REPORT GENERATION -->
     <div class="hidden">
         <div id="pdf-container" class="a5-pdf-template">
             <!-- School Header -->
@@ -431,7 +610,7 @@
                 <p style="font-size: 8.5pt; margin: 2px 0 0 0; color: #334155;" id="pdf-report-title">RAPOR BAŞLIĞI</p>
             </div>
 
-            <!-- Sub Header (Left Teacher, Right Principal) -->
+            <!-- Sub Header -->
             <div style="display: table; width: 100%; margin-bottom: 6px; font-size: 7.5pt; color: #1e293b;">
                 <div style="display: table-cell; text-align: left; width: 50%;">
                     <strong>Öğretmen:</strong> <span id="pdf-teacher-name">-</span>
@@ -477,9 +656,9 @@
                 { id: 's3', firstName: 'Zeynep', lastName: 'Demir', className: '5-A', number: '205' }
             ],
             notes: JSON.parse(localStorage.getItem('sys_notes')) || {
-                // Key: 'studentId_courseId' -> { y1: '85', y2: '90', p1: '95', p2: '100', pr: 'Pekiyi', avg: '92.5' }
                 's1_d1': { y1: '90', y2: '95', p1: '100', p2: '100', pr: 'Örnek Öğrenci', avg: '96.25' }
-            }
+            },
+            schedule: JSON.parse(localStorage.getItem('sys_schedule')) || {}
         };
 
         // SAVE STATE
@@ -489,10 +668,11 @@
             localStorage.setItem('sys_courses', JSON.stringify(state.courses));
             localStorage.setItem('sys_students', JSON.stringify(state.students));
             localStorage.setItem('sys_notes', JSON.stringify(state.notes));
+            localStorage.setItem('sys_schedule', JSON.stringify(state.schedule));
             updateDashboardStats();
         }
 
-        // MOBILE DRAWER MENU CONTROLLER (Left 70% width)
+        // MOBILE DRAWER MENU CONTROLLER
         function toggleMobileMenu() {
             const drawer = document.getElementById('mobile-menu-drawer');
             const overlay = document.getElementById('mobile-menu-overlay');
@@ -508,19 +688,19 @@
 
         // NAVIGATION TAB SWITCHER
         function switchTab(tabKey) {
-            const views = ['home', 'school', 'classes', 'courses', 'students', 'notes'];
+            const views = ['home', 'school', 'classes', 'courses', 'schedule', 'students', 'notes'];
             views.forEach(v => {
                 document.getElementById('view-' + v).classList.add('hidden');
                 const btn = document.getElementById('tab-' + v);
                 if (btn) {
-                    btn.className = "nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100";
+                    btn.className = "nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100";
                 }
             });
 
             document.getElementById('view-' + tabKey).classList.remove('hidden');
             const activeBtn = document.getElementById('tab-' + tabKey);
             if (activeBtn) {
-                activeBtn.className = "nav-tab px-4 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 bg-indigo-600 text-white shadow-sm";
+                activeBtn.className = "nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 bg-indigo-600 text-white shadow-sm";
             }
 
             if (tabKey === 'students') {
@@ -534,6 +714,8 @@
                 renderCourses();
             } else if (tabKey === 'school') {
                 loadSchoolForm();
+            } else if (tabKey === 'schedule') {
+                renderSchedule();
             }
         }
 
@@ -605,9 +787,9 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-center font-medium text-slate-500">${idx + 1}</td>
-                    <td class="py-2.5 px-3 font-semibold text-slate-800">${escapeHtml(cls.name)}</td>
-                    <td class="py-2.5 px-3 text-center space-x-1">
+                    <td class="py-2.5 px-3 text-center font-medium text-slate-500 whitespace-nowrap">${idx + 1}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-800 whitespace-nowrap">${escapeHtml(cls.name)}</td>
+                    <td class="py-2.5 px-3 text-center space-x-1 whitespace-nowrap">
                         <button onclick="editClass('${cls.id}')" class="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 hover:bg-amber-200 rounded font-medium">Düzenle</button>
                         <button onclick="deleteClass('${cls.id}')" class="px-2 py-0.5 text-xs bg-rose-100 text-rose-700 hover:bg-rose-200 rounded font-medium">Sil</button>
                     </td>
@@ -674,9 +856,9 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-center font-medium text-slate-500">${idx + 1}</td>
-                    <td class="py-2.5 px-3 font-semibold text-slate-800">${escapeHtml(crs.name)}</td>
-                    <td class="py-2.5 px-3 text-center space-x-1">
+                    <td class="py-2.5 px-3 text-center font-medium text-slate-500 whitespace-nowrap">${idx + 1}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-800 whitespace-nowrap">${escapeHtml(crs.name)}</td>
+                    <td class="py-2.5 px-3 text-center space-x-1 whitespace-nowrap">
                         <button onclick="editCourse('${crs.id}')" class="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 hover:bg-amber-200 rounded font-medium">Düzenle</button>
                         <button onclick="deleteCourse('${crs.id}')" class="px-2 py-0.5 text-xs bg-rose-100 text-rose-700 hover:bg-rose-200 rounded font-medium">Sil</button>
                     </td>
@@ -727,7 +909,54 @@
             document.getElementById('btn-save-course').innerHTML = `<i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet`;
         }
 
-        // --- 4. STUDENT MANAGEMENT ---
+        // --- 4. DERS PROGRAMI MANAGEMENT ---
+        function renderSchedule() {
+            const tbody = document.getElementById('schedule-table-body');
+            tbody.innerHTML = '';
+
+            const hours = [1, 2, 3, 4, 5, 6, 7, 8];
+            const days = ['pazartesi', 'sali', 'carsamba', 'persembe', 'cuma'];
+
+            hours.forEach(h => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-100/50 transition";
+                
+                let rowHtml = `<td class="py-2 px-2 font-bold text-slate-600 bg-slate-100 border-r border-slate-200">${h}. Ders</td>`;
+                
+                days.forEach(day => {
+                    const cellKey = `${day}_${h}`;
+                    const val = state.schedule[cellKey] || '';
+                    rowHtml += `
+                        <td class="p-1 border-r border-slate-200 min-w-[110px]">
+                            <input type="text" id="sch_${cellKey}" value="${escapeHtml(val)}" placeholder="Ders / Sınıf" class="w-full text-center px-1.5 py-1 text-xs border border-slate-200 rounded focus:border-indigo-500 focus:bg-indigo-50/30 outline-none">
+                        </td>
+                    `;
+                });
+                
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function saveSchedule() {
+            const hours = [1, 2, 3, 4, 5, 6, 7, 8];
+            const days = ['pazartesi', 'sali', 'carsamba', 'persembe', 'cuma'];
+
+            days.forEach(day => {
+                hours.forEach(h => {
+                    const cellKey = `${day}_${h}`;
+                    const el = document.getElementById(`sch_${cellKey}`);
+                    if (el) {
+                        state.schedule[cellKey] = el.value.trim();
+                    }
+                });
+            });
+
+            saveToStorage();
+            alert('Haftalık ders programı kaydedildi!');
+        }
+
+        // --- 5. STUDENT MANAGEMENT ---
         function populateClassDropdowns() {
             const selectAdd = document.getElementById('student-class-select');
             const selectFilter = document.getElementById('filter-student-class');
@@ -735,7 +964,7 @@
             const currentAddVal = selectAdd.value;
             const currentFilterVal = selectFilter.value;
 
-            selectAdd.innerHTML = '<option value="">Sınıf Seç</option>';
+            selectAdd.innerHTML = '<option value="">Sınıf Seçiniz</option>';
             selectFilter.innerHTML = '<option value="">Tüm Sınıflar</option>';
 
             const sortedClasses = [...state.classes].sort((a,b) => a.name.localeCompare(b.name, 'tr'));
@@ -766,7 +995,7 @@
             }
 
             if (filteredList.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-slate-400">Öğrenci bulunamadı.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-slate-400 whitespace-nowrap">Öğrenci bulunamadı.</td></tr>`;
                 return;
             }
 
@@ -774,11 +1003,11 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-slate-50 transition";
                 tr.innerHTML = `
-                    <td class="py-2.5 px-3 text-center font-medium text-slate-500">${idx + 1}</td>
-                    <td class="py-2.5 px-3 font-semibold text-slate-800">${escapeHtml(std.firstName)} ${escapeHtml(std.lastName)}</td>
-                    <td class="py-2.5 px-3"><span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-medium">${escapeHtml(std.className || '-')}</span></td>
-                    <td class="py-2.5 px-3 text-slate-600 font-mono text-xs">${escapeHtml(std.number || '-')}</td>
-                    <td class="py-2.5 px-3 text-center space-x-1">
+                    <td class="py-2.5 px-3 text-center font-medium text-slate-500 whitespace-nowrap">${idx + 1}</td>
+                    <td class="py-2.5 px-3 font-semibold text-slate-800 whitespace-nowrap">${escapeHtml(std.firstName)} ${escapeHtml(std.lastName)}</td>
+                    <td class="py-2.5 px-3 whitespace-nowrap"><span class="px-2 py-0.5 bg-slate-100 text-slate-700 rounded text-xs font-medium">${escapeHtml(std.className || '-')}</span></td>
+                    <td class="py-2.5 px-3 text-slate-600 font-mono text-xs whitespace-nowrap">${escapeHtml(std.number || '-')}</td>
+                    <td class="py-2.5 px-3 text-center space-x-1 whitespace-nowrap">
                         <button onclick="editStudent('${std.id}')" class="px-2 py-0.5 text-xs bg-amber-100 text-amber-700 hover:bg-amber-200 rounded font-medium">Düzenle</button>
                         <button onclick="deleteStudent('${std.id}')" class="px-2 py-0.5 text-xs bg-rose-100 text-rose-700 hover:bg-rose-200 rounded font-medium">Sil</button>
                     </td>
@@ -848,7 +1077,7 @@
             document.getElementById('btn-save-student').innerHTML = `<i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet`;
         }
 
-        // --- 5. NOTES MANAGEMENT (1.Y, 2.Y, 1.P, 2.P, PR, ORT) ---
+        // --- 6. NOTES MANAGEMENT ---
         function populateNotesDropdowns() {
             const classSelect = document.getElementById('notes-class-select');
             const courseSelect = document.getElementById('notes-course-select');
@@ -909,13 +1138,13 @@
                         <div class="flex items-center gap-2">
                             <span class="w-5 h-5 rounded-full bg-purple-100 text-purple-700 text-xs font-bold flex items-center justify-center">${idx + 1}</span>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-xs sm:text-sm">${escapeHtml(std.firstName)} ${escapeHtml(std.lastName)}</h4>
+                                <h4 class="font-bold text-slate-800 text-xs sm:text-sm whitespace-nowrap">${escapeHtml(std.firstName)} ${escapeHtml(std.lastName)}</h4>
                                 <span class="text-[10px] text-slate-500">No: ${escapeHtml(std.number || '-')}</span>
                             </div>
                         </div>
 
                         <div class="flex items-center gap-2">
-                            <div class="text-right text-[11px] text-slate-600 hidden sm:block">
+                            <div class="text-right text-[11px] text-slate-600 hidden sm:block whitespace-nowrap">
                                 Ort: <strong class="text-purple-700 font-bold">${gradeData.avg || '-'}</strong>
                             </div>
                             
@@ -925,7 +1154,7 @@
                         </div>
                     </div>
 
-                    <!-- Expandable Form for Grades (1.Y, 2.Y, 1.P, 2.P, PR, Ort) -->
+                    <!-- Expandable Form for Grades -->
                     <div id="grade-form-${std.id}" class="hidden p-3 border-t border-slate-200 bg-purple-50/30 space-y-2">
                         <div class="grid grid-cols-2 sm:grid-cols-6 gap-2">
                             <div>
@@ -1050,7 +1279,7 @@
                 .replace(/'/g, "&#039;");
         }
 
-        // --- EXACT A5 VERTICAL PDF EXPORT UTILITY (Fits A5 Vertical Page Without Cutting Off) ---
+        // --- A5 VERTICAL PDF EXPORT UTILITY ---
         function generateA5PDF(reportTitle, tableHtml, filename) {
             document.getElementById('pdf-school-title').textContent = state.school.name || 'OKUL ADI BELİRTİLMEDİ';
             document.getElementById('pdf-report-title').textContent = reportTitle;
@@ -1061,9 +1290,8 @@
 
             const element = document.getElementById('pdf-container');
             
-            // html2pdf strict configuration for A5 Portrait fit
             const opt = {
-                margin:       [4, 4, 4, 4], // 4mm tight margin
+                margin:       [4, 4, 4, 4],
                 filename:     filename || 'rapor.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, logging: false, useCORS: true },

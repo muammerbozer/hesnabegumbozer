@@ -27,6 +27,14 @@
             box-sizing: border-box;
             font-size: 8.5pt;
         }
+
+        /* Exactly 3 Lines Text Truncation */
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col relative">
@@ -34,7 +42,6 @@
     <!-- TOP HEADER BANNER -->
     <header class="bg-gradient-to-r from-indigo-800 via-indigo-700 to-blue-800 text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 flex justify-between items-center">
-            
             <div class="flex items-center gap-3">
                 <button onclick="toggleMobileMenu()" class="md:hidden p-2 text-indigo-100 hover:text-white hover:bg-white/10 rounded-lg transition" title="Menü">
                     <i class="fa-solid fa-bars text-xl"></i>
@@ -73,6 +80,15 @@
             <button onclick="switchTab('home'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
                 <i class="fa-solid fa-house w-5 text-indigo-500"></i> Ana Sayfa
             </button>
+            <button onclick="switchTab('library'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
+                <i class="fa-solid fa-book-bookmark w-5 text-indigo-500"></i> Kitaplık
+            </button>
+            <button onclick="switchTab('plan'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
+                <i class="fa-solid fa-list-check w-5 text-indigo-500"></i> Plan
+            </button>
+            <button onclick="switchTab('thisweek'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left w-5 text-indigo-500"></i> Bu Hafta
+            </button>
             <button onclick="switchTab('school'); toggleMobileMenu();" class="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 flex items-center gap-2">
                 <i class="fa-solid fa-school w-5 text-indigo-500"></i> Okulum
             </button>
@@ -100,27 +116,36 @@
     <!-- DESKTOP NAVIGATION TABS -->
     <nav class="hidden md:block bg-white border-b border-slate-200 shadow-sm sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex space-x-1 py-2">
-                <button onclick="switchTab('home')" id="tab-home" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 bg-indigo-600 text-white shadow-sm">
+            <div class="flex space-x-1 py-2 overflow-x-auto">
+                <button onclick="switchTab('home')" id="tab-home" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-sm shrink-0">
                     <i class="fa-solid fa-house"></i> Ana Sayfa
                 </button>
-                <button onclick="switchTab('school')" id="tab-school" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-school"></i> Okul Bilgileri
+                <button onclick="switchTab('library')" id="tab-library" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
+                    <i class="fa-solid fa-book-bookmark"></i> Kitaplık
                 </button>
-                <button onclick="switchTab('classes')" id="tab-classes" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('plan')" id="tab-plan" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
+                    <i class="fa-solid fa-list-check"></i> Plan
+                </button>
+                <button onclick="switchTab('thisweek')" id="tab-thisweek" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Bu Hafta
+                </button>
+                <button onclick="switchTab('school')" id="tab-school" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
+                    <i class="fa-solid fa-school"></i> Okulum
+                </button>
+                <button onclick="switchTab('classes')" id="tab-classes" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
                     <i class="fa-solid fa-chalkboard-user"></i> Sınıflar
                 </button>
-                <button onclick="switchTab('courses')" id="tab-courses" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('courses')" id="tab-courses" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
                     <i class="fa-solid fa-book-open"></i> Dersler
                 </button>
-                <button onclick="switchTab('schedule')" id="tab-schedule" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('schedule')" id="tab-schedule" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
                     <i class="fa-solid fa-calendar-days"></i> Ders Programı
                 </button>
-                <button onclick="switchTab('students')" id="tab-students" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
+                <button onclick="switchTab('students')" id="tab-students" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
                     <i class="fa-solid fa-user-graduate"></i> Öğrenciler
                 </button>
-                <button onclick="switchTab('notes')" id="tab-notes" class="nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-clipboard-list"></i> Notlar & Değerlendirme
+                <button onclick="switchTab('notes')" id="tab-notes" class="nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0">
+                    <i class="fa-solid fa-clipboard-list"></i> Not Defteri
                 </button>
             </div>
         </div>
@@ -131,10 +156,9 @@
 
         <!-- 1. HOME VIEW -->
         <section id="view-home" class="space-y-6">
-            
             <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200/80">
                 <div class="max-w-3xl">
-                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 font-semibold text-xs rounded-full mb-3 border border-indigo-100">Tek Sayfa Okul Otomasyonu</span>
+                    <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 font-semibold text-xs rounded-full mb-3 border border-indigo-100">Muammer BOZER</span>
                     <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Eğitim Yönetim Portalına Hoş Geldiniz</h2>
                     <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">Sınıf, ders, öğrenci, ders programı ve not kaydı işlemlerinizi hızlıca gerçekleştirebilir; A5 boyutunda dikey PDF raporları oluşturabilirsiniz.</p>
                 </div>
@@ -173,7 +197,6 @@
 
             <!-- Duyurular, Etkinlikler ve Eğitim Takvimi Gridi -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
                 <!-- Duyurular Panel -->
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col justify-between">
                     <div>
@@ -212,9 +235,131 @@
                         <i class="fa-solid fa-plus text-[10px]"></i> Giriş Yap / Yönet
                     </button>
                 </div>
-
             </div>
+        </section>
 
+        <!-- KİTAPLIK SAYFASI (4 HORIZONTAL CARDS WITH TOGGLE ARTICLES) -->
+        <section id="view-library" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
+                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-book-bookmark text-indigo-600"></i> Eğitim Makaleleri Kitaplığı
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Makale 1 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider block mb-1">Makale 1</span>
+                            <h3 class="font-bold text-sm text-slate-800 mb-2">Eğitimde Yapay Zeka Dönüşümü</h3>
+                            <div onclick="toggleArticle('art1')" class="cursor-pointer group">
+                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-indigo-300 group-hover:text-indigo-600 transition">
+                                    Yapay zeka teknolojileri eğitim dünyasında öğretmenlerin ders planlama süreçlerinden kişiselleştirilmiş öğrenme rotalarına kadar köklü değişimler sunmaktadır.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Makale 2 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block mb-1">Makale 2</span>
+                            <h3 class="font-bold text-sm text-slate-800 mb-2">Değerler Eğitiminin Önemi</h3>
+                            <div onclick="toggleArticle('art2')" class="cursor-pointer group">
+                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-emerald-300 group-hover:text-emerald-600 transition">
+                                    Genç bireylerin ahlaki ve insani değerlerle donatılması, sadece akademik başarıyla kısıtlı kalmayıp toplumsal huzurun temel taşını oluşturmaktadır.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Makale 3 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider block mb-1">Makale 3</span>
+                            <h3 class="font-bold text-sm text-slate-800 mb-2">Oyunlaştırarak Öğrenme</h3>
+                            <div onclick="toggleArticle('art3')" class="cursor-pointer group">
+                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-amber-300 group-hover:text-amber-600 transition">
+                                    Derslerin etkileşimli oyunlarla desteklenmesi öğrencilerin motivasyonunu artırırken zor kavramların kalıcı bir şekilde öğrenilmesine katkı sağlar.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Makale 4 -->
+                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
+                        <div>
+                            <span class="text-[10px] font-bold text-purple-600 uppercase tracking-wider block mb-1">Makale 4</span>
+                            <h3 class="font-bold text-sm text-slate-800 mb-2">Öğrenci Odaklı Rehberlik</h3>
+                            <div onclick="toggleArticle('art4')" class="cursor-pointer group">
+                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-purple-300 group-hover:text-purple-600 transition">
+                                    Bireysel potansiyeli ortaya çıkaran rehberlik yaklaşımları, öğrencilerin kendi ilgi alanlarını keşfetmelerine ve problem çözme yeteneklerini geliştirmelerine olanak tanır.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAKALE İÇERİKLERİ (Tıklanınca Aynı Sayfada Açılır/Kapanır) -->
+                <div id="art1" class="hidden mt-4 p-5 bg-indigo-50/80 border border-indigo-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art1')">
+                    <div class="flex justify-between items-center mb-2 border-b border-indigo-200 pb-2">
+                        <h4 class="font-bold text-indigo-900 text-base">Eğitimde Yapay Zeka Dönüşümü ve Öğretmenin Rolü</h4>
+                        <span class="text-[10px] text-indigo-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
+                    </div>
+                    <p class="leading-relaxed text-slate-700 space-y-2">
+                        Yapay zeka araçları, günümüz sınıf ortamlarında öğretmenlerin iş yükünü hafifletirken öğrencilere bireysel hızlarında öğrenme fırsatı sunmaktadır. Dijital içerik üretimi, kişiselleştirilmiş değerlendirme mekanizmaları ve NotebookLM gibi akıllı platformlar sayesinde ders içi etkileşim en üst düzeye çıkmaktadır. Öğretmen, bilginin tek kaynağı olmaktan çıkıp rehber ve kolaylaştırıcı konumuna evrilmektedir.
+                    </p>
+                </div>
+
+                <div id="art2" class="hidden mt-4 p-5 bg-emerald-50/80 border border-emerald-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art2')">
+                    <div class="flex justify-between items-center mb-2 border-b border-emerald-200 pb-2">
+                        <h4 class="font-bold text-emerald-900 text-base">Değerler Eğitimi ve Karakter Gelişimi</h4>
+                        <span class="text-[10px] text-emerald-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
+                    </div>
+                    <p class="leading-relaxed text-slate-700">
+                        Ahlaki gelişim ve değerler eğitimi, çağdaş eğitim sistemlerinin ayrılmaz bir parçasıdır. Saygı, sorumluluk, adalet ve empati gibi evrensel değerler; simülasyonlar, örnek olay analizleri ve sinema filmleri pedagojik birer araç olarak kullanılarak işlendiğinde öğrencilerde kalıcı davranış değişiklikleri meydana gelmektedir.
+                    </p>
+                </div>
+
+                <div id="art3" class="hidden mt-4 p-5 bg-amber-50/80 border border-amber-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art3')">
+                    <div class="flex justify-between items-center mb-2 border-b border-amber-200 pb-2">
+                        <h4 class="font-bold text-amber-900 text-base">Eğitimde Oyunlaştırma Teknikleri</h4>
+                        <span class="text-[10px] text-amber-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
+                    </div>
+                    <p class="leading-relaxed text-slate-700">
+                        Oyunlaştırma, oyun mekaniklerinin eğitim ortamlarına entegre edilerek öğrenme motivasyonunun artırılmasıdır. Puan, rozet, liderlik tabloları ve etkileşimli dijital araçlar (LearningApps vb.) kullanılarak yapılan dersler, öğrencilerin pasif dinleyici konumundan aktif katılımcı konumuna geçmesini sağlar.
+                    </p>
+                </div>
+
+                <div id="art4" class="hidden mt-4 p-5 bg-purple-50/80 border border-purple-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art4')">
+                    <div class="flex justify-between items-center mb-2 border-b border-purple-200 pb-2">
+                        <h4 class="font-bold text-purple-900 text-base">Öğrenci Odaklı Çağdaş Rehberlik</h4>
+                        <span class="text-[10px] text-purple-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
+                    </div>
+                    <p class="leading-relaxed text-slate-700">
+                        Her öğrencinin öğrenme hızı, stili ve zeka alanı birbirinden farklıdır. Çağdaş rehberlik yaklaşımları, öğrencinin özgüvenini artırmayı ve kendini gerçekleştirme yolculuğunda ona rehberlik etmeyi hedefler. Sınıf içi olumlu iklim oluşturulması akademik başarıyı doğrudan tetikler.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLAN SAYFASI (40 WEEKS BUTTONS - 5 PER ROW) -->
+        <section id="view-plan" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
+                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-indigo-600"></i> Yıllık Plan Haftaları (40 Hafta)
+                </h2>
+                <div id="plan-buttons-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"></div>
+            </div>
+        </section>
+
+        <!-- BU HAFTA SAYFASI (40 WEEKS BUTTONS - 5 PER ROW) -->
+        <section id="view-thisweek" class="hidden space-y-4">
+            <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
+                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i> Bu Hafta Kazanımları (40 Hafta)
+                </h2>
+                <div id="thisweek-buttons-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3"></div>
+            </div>
         </section>
 
         <!-- 2. SCHOOL VIEW -->
@@ -329,7 +474,7 @@
             </div>
         </section>
 
-        <!-- 5. DERS PROGRAMI SAYFASI (EŞİT SÜTUN GENİŞLİKLİ DÜZEN) -->
+        <!-- 5. DERS PROGRAMI SAYFASI -->
         <section id="view-schedule" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -346,7 +491,6 @@
                     </div>
                 </div>
 
-                <!-- Fixed Table Layout for Equal Column Widths -->
                 <div class="overflow-x-auto border border-slate-200 rounded-xl">
                     <table class="w-full text-center border-collapse text-xs table-fixed">
                         <thead>
@@ -365,7 +509,7 @@
             </div>
         </section>
 
-        <!-- 6. STUDENTS VIEW (SINGLE LINE CLASS COLUMN) -->
+        <!-- 6. STUDENTS VIEW -->
         <section id="view-students" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
@@ -524,6 +668,26 @@
         </div>
     </div>
 
+    <!-- MODAL POPUP FOR WEEKLY PLAN DETAILS -->
+    <div id="week-detail-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-indigo-800 text-white flex justify-between items-center">
+                <h3 id="week-modal-title" class="font-bold text-sm flex items-center gap-2">
+                    <i class="fa-solid fa-calendar-day text-amber-300"></i> Hafta Detayı
+                </h3>
+                <button onclick="closeWeekModal()" class="text-indigo-200 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="p-5 text-xs sm:text-sm text-slate-800 space-y-3 overflow-y-auto">
+                <div id="week-modal-content" class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 font-mono leading-relaxed whitespace-pre-line text-slate-800"></div>
+            </div>
+            <div class="p-3 bg-slate-50 border-t flex justify-end">
+                <button onclick="closeWeekModal()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg">Kapat</button>
+            </div>
+        </div>
+    </div>
+
     <!-- FOOTER -->
     <footer class="bg-white border-t border-slate-200 mt-auto py-3 text-center text-[11px] text-slate-500">
         <p>© 2026 Okul Yönetim Otomasyonu - Öğrenme Köşesi</p>
@@ -616,16 +780,18 @@
         }
 
         function switchTab(tabKey) {
-            const views = ['home', 'school', 'classes', 'courses', 'schedule', 'students', 'notes'];
+            const views = ['home', 'library', 'plan', 'thisweek', 'school', 'classes', 'courses', 'schedule', 'students', 'notes'];
             views.forEach(v => {
-                document.getElementById('view-' + v).classList.add('hidden');
+                const el = document.getElementById('view-' + v);
+                if (el) el.classList.add('hidden');
                 const btn = document.getElementById('tab-' + v);
-                if (btn) btn.className = "nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 text-slate-600 hover:text-indigo-600 hover:bg-slate-100";
+                if (btn) btn.className = "nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 shrink-0";
             });
 
-            document.getElementById('view-' + tabKey).classList.remove('hidden');
+            const targetView = document.getElementById('view-' + tabKey);
+            if (targetView) targetView.classList.remove('hidden');
             const activeBtn = document.getElementById('tab-' + tabKey);
-            if (activeBtn) activeBtn.className = "nav-tab px-3.5 py-2 rounded-lg font-medium text-sm transition flex items-center gap-2 bg-indigo-600 text-white shadow-sm";
+            if (activeBtn) activeBtn.className = "nav-tab px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition flex items-center gap-1.5 bg-indigo-600 text-white shadow-sm shrink-0";
 
             if (tabKey === 'students') { populateClassDropdowns(); renderStudents(); }
             else if (tabKey === 'notes') { populateNotesDropdowns(); }
@@ -633,6 +799,8 @@
             else if (tabKey === 'courses') { renderCourses(); }
             else if (tabKey === 'school') { loadSchoolForm(); }
             else if (tabKey === 'schedule') { renderSchedule(); }
+            else if (tabKey === 'plan') { renderPlanButtons('plan-buttons-grid'); }
+            else if (tabKey === 'thisweek') { renderPlanButtons('thisweek-buttons-grid'); }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -643,6 +811,47 @@
             renderCourses();
             renderStudents();
         });
+
+        // --- KİTAPLIK ARTICLE TOGGLE ---
+        function toggleArticle(id) {
+            const art = document.getElementById(id);
+            if (art) art.classList.toggle('hidden');
+        }
+
+        // --- PLAN & BU HAFTA BUTTONS (40 WEEKS) ---
+        function renderPlanButtons(containerId) {
+            const grid = document.getElementById(containerId);
+            if (!grid) return;
+            grid.innerHTML = '';
+
+            const startDate = new Date(2026, 8, 14); // 14 Eylül 2026
+
+            for (let i = 1; i <= 40; i++) {
+                let currentWeekDate = new Date(startDate);
+                currentWeekDate.setDate(startDate.getDate() + (i - 1) * 7);
+                let dateStr = currentWeekDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                grid.innerHTML += `
+                    <button onclick="openWeekModal(${i}, '${dateStr}')" class="p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-xl transition text-center shadow-sm group">
+                        <div class="text-xs font-bold text-indigo-700 group-hover:text-indigo-900">${i}. Hafta</div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">${dateStr}</div>
+                    </button>
+                `;
+            }
+        }
+
+        function openWeekModal(weekNum, dateStr) {
+            document.getElementById('week-modal-title').innerHTML = `<i class="fa-solid fa-calendar-day text-amber-300"></i> ${weekNum}. Hafta / ${dateStr}`;
+            
+            const textContent = `${weekNum}. Hafta / ${dateStr}\n\n5. Sınıf Din Kültürü ve Ahlak Bilgisi\n5.1.1. Evrendeki mükemmel düzene ilişkin akıl yürütebilme çalışmaları yapıldı.\n\n6. Sınıf Din Kültürü ve Ahlak Bilgisi\n6.1.1. Evrendeki mükemmel düzeni gözlem yoluyla fark edip Allah'ın (cc) varlığı ve birliğini gözleme dayalı tahmin edebilme.`;
+            
+            document.getElementById('week-modal-content').innerText = textContent;
+            document.getElementById('week-detail-modal').classList.remove('hidden');
+        }
+
+        function closeWeekModal() {
+            document.getElementById('week-detail-modal').classList.add('hidden');
+        }
 
         // --- HOME CARDS ---
         function renderHomeCards() {
@@ -1128,7 +1337,7 @@
             document.getElementById('btn-save-student').innerHTML = `<i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet`;
         }
 
-        // --- NOTES & ADVANCED CALCULATION ---
+        // --- NOTES & CALCULATION ---
         function populateNotesDropdowns() {
             const classSelect = document.getElementById('notes-class-select');
             const courseSelect = document.getElementById('notes-course-select');
@@ -1210,11 +1419,6 @@
             });
         }
 
-        // CUSTOM CALCULATION RULE:
-        // Ignore empty inputs.
-        // Yazılı Avg = Average of entered Y1 and Y2.
-        // Performans Avg = Average of entered P1 and P2.
-        // General Avg = Average of (Yazılı Avg, Performans Avg, Project Grade if entered).
         function calculateAvg(studentId) {
             const rawY1 = document.getElementById(`grade-y1-${studentId}`).value;
             const rawY2 = document.getElementById(`grade-y2-${studentId}`).value;
@@ -1228,22 +1432,18 @@
             const p2 = parseFloat(rawP2);
             const pr = parseFloat(rawPR);
 
-            // 1. Yazılı Ortalaması
             let examVals = [];
             if (!isNaN(y1) && rawY1.trim() !== '') examVals.push(y1);
             if (!isNaN(y2) && rawY2.trim() !== '') examVals.push(y2);
             let examAvg = examVals.length > 0 ? (examVals.reduce((a, b) => a + b, 0) / examVals.length) : null;
 
-            // 2. Performans Ortalaması
             let perfVals = [];
             if (!isNaN(p1) && rawP1.trim() !== '') perfVals.push(p1);
             if (!isNaN(p2) && rawP2.trim() !== '') perfVals.push(p2);
             let perfAvg = perfVals.length > 0 ? (perfVals.reduce((a, b) => a + b, 0) / perfVals.length) : null;
 
-            // 3. Proje Notu
             let prVal = (!isNaN(pr) && rawPR.trim() !== '') ? pr : null;
 
-            // 4. Genel Ortalama Bileşenleri
             let components = [];
             if (examAvg !== null) components.push(examAvg);
             if (perfAvg !== null) components.push(perfAvg);

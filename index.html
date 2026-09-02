@@ -254,14 +254,13 @@
             </div>
         </section>
 
-        <!-- 3. CLASSES VIEW (FLEX WRAP SIZIN - NO OVERFLOW) -->
+        <!-- 3. CLASSES VIEW -->
         <section id="view-classes" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-chalkboard-user text-indigo-600"></i> Sınıf Yönetimi
                 </h2>
                 
-                <!-- FULL FIT CONTAINER -->
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
                     <div class="flex flex-wrap items-center gap-2">
                         <input type="hidden" id="class-edit-id" value="">
@@ -330,7 +329,7 @@
             </div>
         </section>
 
-        <!-- 5. DERS PROGRAMI SAYFASI (WITH SAVE + PDF BUTTONS) -->
+        <!-- 5. DERS PROGRAMI SAYFASI (EŞİT SÜTUN GENİŞLİKLİ DÜZEN) -->
         <section id="view-schedule" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
@@ -347,16 +346,17 @@
                     </div>
                 </div>
 
+                <!-- Fixed Table Layout for Equal Column Widths -->
                 <div class="overflow-x-auto border border-slate-200 rounded-xl">
-                    <table class="w-full text-center border-collapse text-xs">
+                    <table class="w-full text-center border-collapse text-xs table-fixed">
                         <thead>
                             <tr class="bg-indigo-900 text-white font-semibold">
-                                <th class="py-2.5 px-2 w-16 border-r border-indigo-800">Saat / Ders</th>
-                                <th class="py-2.5 px-2">Pazartesi</th>
-                                <th class="py-2.5 px-2">Salı</th>
-                                <th class="py-2.5 px-2">Çarşamba</th>
-                                <th class="py-2.5 px-2">Perşembe</th>
-                                <th class="py-2.5 px-2">Cuma</th>
+                                <th class="py-2.5 px-1 w-[10%] border-r border-indigo-800">Saat</th>
+                                <th class="py-2.5 px-1 w-[18%]">Pazartesi</th>
+                                <th class="py-2.5 px-1 w-[18%]">Salı</th>
+                                <th class="py-2.5 px-1 w-[18%]">Çarşamba</th>
+                                <th class="py-2.5 px-1 w-[18%]">Perşembe</th>
+                                <th class="py-2.5 px-1 w-[18%]">Cuma</th>
                             </tr>
                         </thead>
                         <tbody id="schedule-table-body" class="divide-y divide-slate-200 bg-slate-50/50"></tbody>
@@ -365,7 +365,7 @@
             </div>
         </section>
 
-        <!-- 6. STUDENTS VIEW (RESPONSIVE TABLE - NO SCROLL NEEDED) -->
+        <!-- 6. STUDENTS VIEW (SINGLE LINE CLASS COLUMN) -->
         <section id="view-students" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
@@ -417,14 +417,13 @@
                         </div>
                     </div>
 
-                    <!-- Compact responsive table without line break forcing -->
                     <div class="w-full overflow-hidden border border-slate-200 rounded-xl">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-slate-100 text-slate-700 border-b border-slate-200 font-semibold">
                                     <th class="py-2 px-2 w-8 text-center">#</th>
                                     <th class="py-2 px-2">Adı Soyadı</th>
-                                    <th class="py-2 px-2 w-16 text-center">Sınıf</th>
+                                    <th class="py-2 px-2 whitespace-nowrap text-center">Sınıf</th>
                                     <th class="py-2 px-2 w-16 text-center">No</th>
                                     <th class="py-2 px-2 w-24 text-center">İşlem</th>
                                 </tr>
@@ -473,7 +472,7 @@
 
                     <div id="notes-student-list" class="space-y-2">
                         <div class="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
-                            Sınıf ve ders seçtiğinizde öğrencilere not girişi yapabileceğiniz alanlar görüntülenecektir.
+                            Sınıf ve ders seçildiğinde not giriş alanı yüklenecektir.
                         </div>
                     </div>
                 </div>
@@ -495,7 +494,6 @@
             </div>
 
             <div class="p-4 space-y-4 overflow-y-auto flex-grow">
-                <!-- Inputs Container -->
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2.5 text-xs">
                     <input type="hidden" id="modal-item-id">
                     <input type="hidden" id="modal-category-type">
@@ -510,9 +508,7 @@
                         <input type="text" id="modal-input-title" placeholder="Başlık giriniz..." class="w-full px-3 py-1.5 border border-slate-300 rounded-lg bg-white outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
 
-                    <div id="modal-extra-field">
-                        <!-- Dynamic Input Field based on category -->
-                    </div>
+                    <div id="modal-extra-field"></div>
 
                     <div class="flex justify-end gap-2 pt-2">
                         <button onclick="resetModalForm()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-medium rounded-lg">Temizle</button>
@@ -520,7 +516,6 @@
                     </div>
                 </div>
 
-                <!-- Existing Items List in Modal -->
                 <div>
                     <h4 class="text-xs font-bold text-slate-700 mb-2">Mevcut Kayıtlar (Tarih Sıralı)</h4>
                     <div id="modal-items-list" class="space-y-2 max-h-56 overflow-y-auto"></div>
@@ -561,7 +556,6 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        // GLOBAL STATE
         let state = {
             school: JSON.parse(localStorage.getItem('sys_school')) || {
                 name: 'Cumhuriyet Ortaokulu',
@@ -650,9 +644,8 @@
             renderStudents();
         });
 
-        // --- HOME CARDS RENDER (SORTED BY DATE) ---
+        // --- HOME CARDS ---
         function renderHomeCards() {
-            // Announcements
             const annList = document.getElementById('home-announcements-list');
             annList.innerHTML = '';
             state.announcements.sort((a,b) => new Date(a.date) - new Date(b.date));
@@ -668,7 +661,6 @@
                 `;
             });
 
-            // Events
             const evtList = document.getElementById('home-events-list');
             evtList.innerHTML = '';
             state.events.sort((a,b) => new Date(a.date) - new Date(b.date));
@@ -682,7 +674,6 @@
                 `;
             });
 
-            // Calendar
             const calList = document.getElementById('home-calendar-list');
             calList.innerHTML = '';
             state.calendar.sort((a,b) => new Date(a.date) - new Date(b.date));
@@ -699,7 +690,7 @@
             });
         }
 
-        // --- MODAL POPUP FOR HOME SECTION EDITING ---
+        // --- MODAL POPUP ---
         function openEntryModal(type) {
             document.getElementById('modal-category-type').value = type;
             const extraContainer = document.getElementById('modal-extra-field');
@@ -979,7 +970,7 @@
             document.getElementById('btn-save-course').innerHTML = `<i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet`;
         }
 
-        // --- SCHEDULE & PDF EXPORT ---
+        // --- SCHEDULE & PDF ---
         function renderSchedule() {
             const tbody = document.getElementById('schedule-table-body');
             tbody.innerHTML = '';
@@ -987,7 +978,7 @@
             const days = ['pazartesi', 'sali', 'carsamba', 'persembe', 'cuma'];
 
             hours.forEach(h => {
-                let rowHtml = `<tr class="hover:bg-slate-100/50"><td class="py-2 px-2 font-bold text-slate-600 bg-slate-100 border-r border-slate-200">${h}. Ders</td>`;
+                let rowHtml = `<tr class="hover:bg-slate-100/50"><td class="py-2 px-1 font-bold text-slate-600 bg-slate-100 border-r border-slate-200 text-center">${h}. Ders</td>`;
                 days.forEach(day => {
                     const cellKey = `${day}_${h}`;
                     const val = state.schedule[cellKey] || '';
@@ -1018,15 +1009,15 @@
 
         function exportSchedulePDF() {
             let html = `
-                <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:7pt; text-align:center;">
+                <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:7pt; text-align:center; table-layout:fixed;">
                     <thead>
                         <tr style="background:#1e1b4b; color:#ffffff;">
-                            <th style="padding:4px; border:0.5px solid #cbd5e1;">Saat</th>
-                            <th style="padding:4px; border:0.5px solid #cbd5e1;">Pazartesi</th>
-                            <th style="padding:4px; border:0.5px solid #cbd5e1;">Salı</th>
-                            <th style="padding:4px; border:0.5px solid #cbd5e1;">Çarşamba</th>
-                            <th style="padding:4px; border:0.5px solid #cbd5e1;">Perşembe</th>
-                            <th style="padding:4px; border:0.5px solid #cbd5e1;">Cuma</th>
+                            <th style="padding:4px; border:0.5px solid #cbd5e1; width:10%;">Saat</th>
+                            <th style="padding:4px; border:0.5px solid #cbd5e1; width:18%;">Pazartesi</th>
+                            <th style="padding:4px; border:0.5px solid #cbd5e1; width:18%;">Salı</th>
+                            <th style="padding:4px; border:0.5px solid #cbd5e1; width:18%;">Çarşamba</th>
+                            <th style="padding:4px; border:0.5px solid #cbd5e1; width:18%;">Perşembe</th>
+                            <th style="padding:4px; border:0.5px solid #cbd5e1; width:18%;">Cuma</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1038,8 +1029,8 @@
                 html += `<tr><td style="padding:4px; border:0.5px solid #cbd5e1; font-weight:bold; background:#f8fafc;">${h}. Ders</td>`;
                 days.forEach(day => {
                     const cellKey = `${day}_${h}`;
-                    const val = state.schedule[cellKey] || '-';
-                    html += `<td style="padding:4px; border:0.5px solid #cbd5e1;">${escapeHtml(val)}</td>`;
+                    const val = state.schedule[cellKey] || '';
+                    html += `<td style="padding:4px; border:0.5px solid #cbd5e1; height:18px;">${escapeHtml(val)}</td>`;
                 });
                 html += `</tr>`;
             });
@@ -1077,9 +1068,9 @@
                     <tr class="hover:bg-slate-50 transition">
                         <td class="py-2 px-2 text-center font-medium text-slate-500">${idx + 1}</td>
                         <td class="py-2 px-2 font-semibold text-slate-800">${escapeHtml(std.firstName)} ${escapeHtml(std.lastName)}</td>
-                        <td class="py-2 px-2 text-center"><span class="px-1.5 py-0.5 bg-slate-100 text-slate-700 rounded text-[10px] font-medium">${escapeHtml(std.className || '-')}</span></td>
+                        <td class="py-2 px-2 text-center whitespace-nowrap"><span class="px-1.5 py-0.5 bg-slate-100 text-slate-700 rounded text-[10px] font-medium inline-block">${escapeHtml(std.className || '-')}</span></td>
                         <td class="py-2 px-2 text-center text-slate-600 font-mono">${escapeHtml(std.number || '-')}</td>
-                        <td class="py-2 px-2 text-center space-x-1">
+                        <td class="py-2 px-2 text-center space-x-1 whitespace-nowrap">
                             <button onclick="editStudent('${std.id}')" class="px-1.5 py-0.5 text-[10px] bg-amber-100 text-amber-700 rounded font-medium">Düzenle</button>
                             <button onclick="deleteStudent('${std.id}')" class="px-1.5 py-0.5 text-[10px] bg-rose-100 text-rose-700 rounded font-medium">Sil</button>
                         </td>
@@ -1137,7 +1128,7 @@
             document.getElementById('btn-save-student').innerHTML = `<i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet`;
         }
 
-        // --- NOTES ---
+        // --- NOTES & ADVANCED CALCULATION ---
         function populateNotesDropdowns() {
             const classSelect = document.getElementById('notes-class-select');
             const courseSelect = document.getElementById('notes-course-select');
@@ -1202,12 +1193,12 @@
 
                         <div id="grade-form-${std.id}" class="hidden p-3 border-t border-slate-200 bg-purple-50/30 space-y-2">
                             <div class="grid grid-cols-2 sm:grid-cols-6 gap-2">
-                                <div><label class="block text-[10px] font-bold text-slate-600">1. Yazılı</label><input type="number" id="grade-y1-${std.id}" value="${escapeHtml(gradeData.y1)}" oninput="calculateAvg('${std.id}')" class="w-full px-2 py-1 border border-slate-300 rounded text-xs"></div>
-                                <div><label class="block text-[10px] font-bold text-slate-600">2. Yazılı</label><input type="number" id="grade-y2-${std.id}" value="${escapeHtml(gradeData.y2)}" oninput="calculateAvg('${std.id}')" class="w-full px-2 py-1 border border-slate-300 rounded text-xs"></div>
-                                <div><label class="block text-[10px] font-bold text-slate-600">1. Perf</label><input type="number" id="grade-p1-${std.id}" value="${escapeHtml(gradeData.p1)}" oninput="calculateAvg('${std.id}')" class="w-full px-2 py-1 border border-slate-300 rounded text-xs"></div>
-                                <div><label class="block text-[10px] font-bold text-slate-600">2. Perf</label><input type="number" id="grade-p2-${std.id}" value="${escapeHtml(gradeData.p2)}" oninput="calculateAvg('${std.id}')" class="w-full px-2 py-1 border border-slate-300 rounded text-xs"></div>
-                                <div><label class="block text-[10px] font-bold text-slate-600">Proje</label><input type="text" id="grade-pr-${std.id}" value="${escapeHtml(gradeData.pr)}" class="w-full px-2 py-1 border border-slate-300 rounded text-xs"></div>
-                                <div><label class="block text-[10px] font-bold text-purple-700">Ortalama</label><input type="text" id="grade-avg-${std.id}" value="${escapeHtml(gradeData.avg)}" readonly class="w-full px-2 py-1 border border-purple-300 rounded text-xs bg-purple-100 font-bold"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">1. Yazılı</label><input type="number" id="grade-y1-${std.id}" value="${escapeHtml(gradeData.y1)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">2. Yazılı</label><input type="number" id="grade-y2-${std.id}" value="${escapeHtml(gradeData.y2)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">1. Perf</label><input type="number" id="grade-p1-${std.id}" value="${escapeHtml(gradeData.p1)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">2. Perf</label><input type="number" id="grade-p2-${std.id}" value="${escapeHtml(gradeData.p2)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">Proje</label><input type="number" id="grade-pr-${std.id}" value="${escapeHtml(gradeData.pr)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-purple-700">Ortalama</label><input type="text" id="grade-avg-${std.id}" value="${escapeHtml(gradeData.avg)}" readonly class="w-full px-2 py-1 border border-purple-300 rounded text-xs bg-purple-100 font-bold text-purple-900"></div>
                             </div>
                             <div class="flex justify-end gap-2 pt-1">
                                 <button onclick="deleteGradeNote('${std.id}')" class="px-2.5 py-1 bg-rose-100 text-rose-700 text-xs rounded font-semibold">Sil</button>
@@ -1219,18 +1210,51 @@
             });
         }
 
+        // CUSTOM CALCULATION RULE:
+        // Ignore empty inputs.
+        // Yazılı Avg = Average of entered Y1 and Y2.
+        // Performans Avg = Average of entered P1 and P2.
+        // General Avg = Average of (Yazılı Avg, Performans Avg, Project Grade if entered).
         function calculateAvg(studentId) {
-            const y1 = parseFloat(document.getElementById(`grade-y1-${studentId}`).value);
-            const y2 = parseFloat(document.getElementById(`grade-y2-${studentId}`).value);
-            const p1 = parseFloat(document.getElementById(`grade-p1-${studentId}`).value);
-            const p2 = parseFloat(document.getElementById(`grade-p2-${studentId}`).value);
-            let vals = [];
-            if (!isNaN(y1)) vals.push(y1);
-            if (!isNaN(y2)) vals.push(y2);
-            if (!isNaN(p1)) vals.push(p1);
-            if (!isNaN(p2)) vals.push(p2);
+            const rawY1 = document.getElementById(`grade-y1-${studentId}`).value;
+            const rawY2 = document.getElementById(`grade-y2-${studentId}`).value;
+            const rawP1 = document.getElementById(`grade-p1-${studentId}`).value;
+            const rawP2 = document.getElementById(`grade-p2-${studentId}`).value;
+            const rawPR = document.getElementById(`grade-pr-${studentId}`).value;
 
-            document.getElementById(`grade-avg-${studentId}`).value = vals.length > 0 ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(2) : '';
+            const y1 = parseFloat(rawY1);
+            const y2 = parseFloat(rawY2);
+            const p1 = parseFloat(rawP1);
+            const p2 = parseFloat(rawP2);
+            const pr = parseFloat(rawPR);
+
+            // 1. Yazılı Ortalaması
+            let examVals = [];
+            if (!isNaN(y1) && rawY1.trim() !== '') examVals.push(y1);
+            if (!isNaN(y2) && rawY2.trim() !== '') examVals.push(y2);
+            let examAvg = examVals.length > 0 ? (examVals.reduce((a, b) => a + b, 0) / examVals.length) : null;
+
+            // 2. Performans Ortalaması
+            let perfVals = [];
+            if (!isNaN(p1) && rawP1.trim() !== '') perfVals.push(p1);
+            if (!isNaN(p2) && rawP2.trim() !== '') perfVals.push(p2);
+            let perfAvg = perfVals.length > 0 ? (perfVals.reduce((a, b) => a + b, 0) / perfVals.length) : null;
+
+            // 3. Proje Notu
+            let prVal = (!isNaN(pr) && rawPR.trim() !== '') ? pr : null;
+
+            // 4. Genel Ortalama Bileşenleri
+            let components = [];
+            if (examAvg !== null) components.push(examAvg);
+            if (perfAvg !== null) components.push(perfAvg);
+            if (prVal !== null) components.push(prVal);
+
+            if (components.length > 0) {
+                const finalAvg = (components.reduce((a, b) => a + b, 0) / components.length).toFixed(2);
+                document.getElementById(`grade-avg-${studentId}`).value = finalAvg;
+            } else {
+                document.getElementById(`grade-avg-${studentId}`).value = '';
+            }
         }
 
         function toggleGradeForm(studentId) {

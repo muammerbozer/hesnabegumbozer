@@ -195,42 +195,36 @@
                 </div>
             </div>
 
-            <!-- Duyurular, Etkinlikler ve Eğitim Takvimi Gridi -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Duyurular, Etkinlikler ve Eğitim Takvimi Gridi (Esnek Yükseklikli Paneller) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                 <!-- Duyurular Panel -->
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-bullhorn text-indigo-600"></i> Okul Duyuruları
-                        </h3>
-                        <div id="home-announcements-list" class="space-y-2.5"></div>
-                    </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-bullhorn text-indigo-600"></i> Okul Duyuruları
+                    </h3>
+                    <div id="home-announcements-list" class="space-y-2.5"></div>
                     <button onclick="openEntryModal('announcements')" class="mt-4 w-full py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-xl border border-indigo-200/80 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus text-[10px]"></i> Giriş Yap / Yönet
                     </button>
                 </div>
 
                 <!-- Etkinlikler Panel -->
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-star text-amber-500"></i> Yaklaşan Etkinlikler
-                        </h3>
-                        <div id="home-events-list" class="space-y-2.5"></div>
-                    </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-star text-amber-500"></i> Yaklaşan Etkinlikler
+                    </h3>
+                    <div id="home-events-list" class="space-y-2.5"></div>
                     <button onclick="openEntryModal('events')" class="mt-4 w-full py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold rounded-xl border border-amber-200/80 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus text-[10px]"></i> Giriş Yap / Yönet
                     </button>
                 </div>
 
                 <!-- Çalışma Takvimi Panel -->
-                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-check text-emerald-600"></i> Çalışma Takvimi
-                        </h3>
-                        <div id="home-calendar-list" class="space-y-2 text-xs"></div>
-                    </div>
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <h3 class="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-calendar-check text-emerald-600"></i> Çalışma Takvimi
+                    </h3>
+                    <div id="home-calendar-list" class="space-y-2 text-xs"></div>
                     <button onclick="openEntryModal('calendar')" class="mt-4 w-full py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-200/80 transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-plus text-[10px]"></i> Giriş Yap / Yönet
                     </button>
@@ -858,7 +852,7 @@
 
             const htmlContent = `
                 <div class="font-semibold text-slate-900 mb-2">${weekNum}. Hafta / ${dateStr}</div>
-                <div class="space-y-2">
+                <div class="space-y-2 text-xs sm:text-sm">
                     <div>
                         <strong class="font-bold text-indigo-900">5. Sınıf Din Kültürü ve Ahlak Bilgisi</strong>
                         <p class="text-slate-700 mt-0.5">5.1.1. Evrendeki mükemmel düzene ilişkin akıl yürütebilme çalışmaları yapıldı.</p>
@@ -866,6 +860,38 @@
                     <div>
                         <strong class="font-bold text-indigo-900">6. Sınıf Din Kültürü ve Ahlak Bilgisi</strong>
                         <p class="text-slate-700 mt-0.5">6.1.1. Evrendeki mükemmel düzeni gözlem yoluyla fark edip Allah'ın (cc) varlığı ve birliğini gözleme dayalı tahmin edebilme.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">7. Sınıf Din Kültürü ve Ahlak Bilgisi</strong>
+                        <p class="text-slate-700 mt-0.5">7.1.1. Evrendeki mükemmel düzenden hareketle Allah'ın varlığı, birliği ve Tevhit inancına yönelik çıkarımlara devam edildi.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">8. Sınıf Din Kültürü ve Ahlak Bilgisi</strong>
+                        <p class="text-slate-700 mt-0.5">8.1.1. Allah'ın (cc) güzel isimleri hakkında bilgi toplama, Rahman ve Rahim isimlerini araştırma çalışmaları yapıldı.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">5. Sınıf Kur'an-ı Kerim</strong>
+                        <p class="text-slate-700 mt-0.5">5.1.1. Evrendeki mükemmel düzene ilişkin akıl yürütebilme çalışmaları yapıldı.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">6. Sınıf Kur'an-ı Kerim</strong>
+                        <p class="text-slate-700 mt-0.5">6.1.1. Evrendeki mükemmel düzeni gözlem yoluyla fark edip Allah'ın (cc) varlığı ve birliğini gözleme dayalı tahmin edebilme.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">7. Sınıf Kur'an-ı Kerim</strong>
+                        <p class="text-slate-700 mt-0.5">7.1.1. Evrendeki mükemmel düzenden hareketle Allah'ın varlığı, birliği ve Tevhit inancına yönelik çıkarımlara devam edildi.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">8. Sınıf Kur'an-ı Kerim</strong>
+                        <p class="text-slate-700 mt-0.5">8.1.1. Allah'ın (cc) güzel isimleri hakkında bilgi toplama, Rahman ve Rahim isimlerini araştırma çalışmaları yapıldı.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">5. Sınıf Robotik ve Kodlama</strong>
+                        <p class="text-slate-700 mt-0.5">7.1.1. Evrendeki mükemmel düzenden hareketle Allah'ın varlığı, birliği ve Tevhit inancına yönelik çıkarımlara devam edildi.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">6. Sınıf Robotik ve Kodlama</strong>
+                        <p class="text-slate-700 mt-0.5">8.1.1. Allah'ın (cc) güzel isimleri hakkında bilgi toplama, Rahman ve Rahim isimlerini araştırma çalışmaları yapıldı.</p>
                     </div>
                 </div>
                 ${linksHtml}

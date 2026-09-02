@@ -238,7 +238,7 @@
             </div>
         </section>
 
-        <!-- KİTAPLIK SAYFASI (4 HORIZONTAL CARDS WITH TOGGLE ARTICLES) -->
+        <!-- KİTAPLIK SAYFASI (INLINE ARTICLE DISPLAY - SINGLE OPEN) -->
         <section id="view-library" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
@@ -246,103 +246,92 @@
                 </h2>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Makale 1 -->
-                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
-                        <div>
-                            <span class="text-[10px] font-bold text-indigo-600 uppercase tracking-wider block mb-1">Makale 1</span>
+                    
+                    <!-- Kutucuk 1 -->
+                    <div class="flex flex-col">
+                        <div onclick="toggleArticle('art1')" class="border border-slate-200 rounded-xl p-4 bg-slate-50 hover:bg-indigo-50/40 transition cursor-pointer shadow-sm flex flex-col justify-between h-full">
                             <h3 class="font-bold text-sm text-slate-800 mb-2">Eğitimde Yapay Zeka Dönüşümü</h3>
-                            <div onclick="toggleArticle('art1')" class="cursor-pointer group">
-                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-indigo-300 group-hover:text-indigo-600 transition">
-                                    Yapay zeka teknolojileri eğitim dünyasında öğretmenlerin ders planlama süreçlerinden kişiselleştirilmiş öğrenme rotalarına kadar köklü değişimler sunmaktadır.
-                                </p>
+                            <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                                Yapay zeka teknolojileri eğitim dünyasında öğretmenlerin ders planlama süreçlerinden kişiselleştirilmiş öğrenme rotalarına kadar köklü değişimler sunmaktadır.
+                            </p>
+                        </div>
+                        <!-- Bağlı Makale İçeriği (Hemen Altında) -->
+                        <div id="art1" class="article-content hidden mt-3 p-4 bg-indigo-50/90 border border-indigo-200 rounded-xl text-xs sm:text-sm cursor-pointer shadow-md" onclick="toggleArticle('art1')">
+                            <div class="flex justify-between items-center mb-2 border-b border-indigo-200 pb-1.5">
+                                <h4 class="font-bold text-indigo-900 text-sm">Eğitimde Yapay Zeka Dönüşümü ve Öğretmenin Rolü</h4>
+                                <span class="text-[10px] text-indigo-600 bg-white px-2 py-0.5 rounded font-bold">Kapat</span>
                             </div>
+                            <p class="leading-relaxed text-slate-700">
+                                Yapay zeka araçları, günümüz sınıf ortamlarında öğretmenlerin iş yükünü hafifletirken öğrencilere bireysel hızlarında öğrenme fırsatı sunmaktadır. Dijital içerik üretimi, kişiselleştirilmiş değerlendirme mekanizmaları ve NotebookLM gibi akıllı platformlar sayesinde ders içi etkileşim en üst düzeye çıkmaktadır.
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Makale 2 -->
-                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
-                        <div>
-                            <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block mb-1">Makale 2</span>
+                    <!-- Kutucuk 2 -->
+                    <div class="flex flex-col">
+                        <div onclick="toggleArticle('art2')" class="border border-slate-200 rounded-xl p-4 bg-slate-50 hover:bg-emerald-50/40 transition cursor-pointer shadow-sm flex flex-col justify-between h-full">
                             <h3 class="font-bold text-sm text-slate-800 mb-2">Değerler Eğitiminin Önemi</h3>
-                            <div onclick="toggleArticle('art2')" class="cursor-pointer group">
-                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-emerald-300 group-hover:text-emerald-600 transition">
-                                    Genç bireylerin ahlaki ve insani değerlerle donatılması, sadece akademik başarıyla kısıtlı kalmayıp toplumsal huzurun temel taşını oluşturmaktadır.
-                                </p>
+                            <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                                Genç bireylerin ahlaki ve insani değerlerle donatılması, sadece akademik başarıyla kısıtlı kalmayıp toplumsal huzurun temel taşını oluşturmaktadır.
+                            </p>
+                        </div>
+                        <!-- Bağlı Makale İçeriği (Hemen Altında) -->
+                        <div id="art2" class="article-content hidden mt-3 p-4 bg-emerald-50/90 border border-emerald-200 rounded-xl text-xs sm:text-sm cursor-pointer shadow-md" onclick="toggleArticle('art2')">
+                            <div class="flex justify-between items-center mb-2 border-b border-emerald-200 pb-1.5">
+                                <h4 class="font-bold text-emerald-900 text-sm">Değerler Eğitimi ve Karakter Gelişimi</h4>
+                                <span class="text-[10px] text-emerald-600 bg-white px-2 py-0.5 rounded font-bold">Kapat</span>
                             </div>
+                            <p class="leading-relaxed text-slate-700">
+                                Ahlaki gelişim ve değerler eğitimi, çağdaş eğitim sistemlerinin ayrılmaz bir parçasıdır. Saygı, sorumluluk, adalet ve empati gibi evrensel değerler; örnek olay analizleri ve sinema filmleri pedagojik birer araç olarak kullanılarak işlendiğinde öğrencilerde kalıcı davranışı tetikler.
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Makale 3 -->
-                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
-                        <div>
-                            <span class="text-[10px] font-bold text-amber-600 uppercase tracking-wider block mb-1">Makale 3</span>
+                    <!-- Kutucuk 3 -->
+                    <div class="flex flex-col">
+                        <div onclick="toggleArticle('art3')" class="border border-slate-200 rounded-xl p-4 bg-slate-50 hover:bg-amber-50/40 transition cursor-pointer shadow-sm flex flex-col justify-between h-full">
                             <h3 class="font-bold text-sm text-slate-800 mb-2">Oyunlaştırarak Öğrenme</h3>
-                            <div onclick="toggleArticle('art3')" class="cursor-pointer group">
-                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-amber-300 group-hover:text-amber-600 transition">
-                                    Derslerin etkileşimli oyunlarla desteklenmesi öğrencilerin motivasyonunu artırırken zor kavramların kalıcı bir şekilde öğrenilmesine katkı sağlar.
-                                </p>
+                            <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                                Derslerin etkileşimli oyunlarla desteklenmesi öğrencilerin motivasyonunu artırırken zor kavramların kalıcı bir şekilde öğrenilmesine katkı sağlar.
+                            </p>
+                        </div>
+                        <!-- Bağlı Makale İçeriği (Hemen Altında) -->
+                        <div id="art3" class="article-content hidden mt-3 p-4 bg-amber-50/90 border border-amber-200 rounded-xl text-xs sm:text-sm cursor-pointer shadow-md" onclick="toggleArticle('art3')">
+                            <div class="flex justify-between items-center mb-2 border-b border-amber-200 pb-1.5">
+                                <h4 class="font-bold text-amber-900 text-sm">Eğitimde Oyunlaştırma Teknikleri</h4>
+                                <span class="text-[10px] text-amber-600 bg-white px-2 py-0.5 rounded font-bold">Kapat</span>
                             </div>
+                            <p class="leading-relaxed text-slate-700">
+                                Oyunlaştırma, oyun mekaniklerinin eğitim ortamlarına entegre edilerek öğrenme motivasyonunun artırılmasıdır. Puan, rozet ve etkileşimli dijital araçlar kullanılarak yapılan dersler, öğrencilerin pasif dinleyici konumundan aktif katılımcı konumuna geçmesini sağlar.
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Makale 4 -->
-                    <div class="border border-slate-200 rounded-xl p-4 bg-slate-50 flex flex-col justify-between shadow-sm">
-                        <div>
-                            <span class="text-[10px] font-bold text-purple-600 uppercase tracking-wider block mb-1">Makale 4</span>
+                    <!-- Kutucuk 4 -->
+                    <div class="flex flex-col">
+                        <div onclick="toggleArticle('art4')" class="border border-slate-200 rounded-xl p-4 bg-slate-50 hover:bg-purple-50/40 transition cursor-pointer shadow-sm flex flex-col justify-between h-full">
                             <h3 class="font-bold text-sm text-slate-800 mb-2">Öğrenci Odaklı Rehberlik</h3>
-                            <div onclick="toggleArticle('art4')" class="cursor-pointer group">
-                                <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed underline decoration-purple-300 group-hover:text-purple-600 transition">
-                                    Bireysel potansiyeli ortaya çıkaran rehberlik yaklaşımları, öğrencilerin kendi ilgi alanlarını keşfetmelerine ve problem çözme yeteneklerini geliştirmelerine olanak tanır.
-                                </p>
+                            <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                                Bireysel potansiyeli ortaya çıkaran rehberlik yaklaşımları, öğrencilerin kendi ilgi alanlarını keşfetmelerine ve problem çözme yeteneklerini geliştirmelerine olanak tanır.
+                            </p>
+                        </div>
+                        <!-- Bağlı Makale İçeriği (Hemen Altında) -->
+                        <div id="art4" class="article-content hidden mt-3 p-4 bg-purple-50/90 border border-purple-200 rounded-xl text-xs sm:text-sm cursor-pointer shadow-md" onclick="toggleArticle('art4')">
+                            <div class="flex justify-between items-center mb-2 border-b border-purple-200 pb-1.5">
+                                <h4 class="font-bold text-purple-900 text-sm">Öğrenci Odaklı Çağdaş Rehberlik</h4>
+                                <span class="text-[10px] text-purple-600 bg-white px-2 py-0.5 rounded font-bold">Kapat</span>
                             </div>
+                            <p class="leading-relaxed text-slate-700">
+                                Her öğrencinin öğrenme hızı ve stili farklıdır. Çağdaş rehberlik yaklaşımları, öğrencinin özgüvenini artırmayı ve kendini gerçekleştirme yolculuğunda ona rehberlik etmeyi hedefler. Sınıf içi olumlu iklim akademik başarıyı doğrudan destekler.
+                            </p>
                         </div>
                     </div>
-                </div>
 
-                <!-- MAKALE İÇERİKLERİ (Tıklanınca Aynı Sayfada Açılır/Kapanır) -->
-                <div id="art1" class="hidden mt-4 p-5 bg-indigo-50/80 border border-indigo-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art1')">
-                    <div class="flex justify-between items-center mb-2 border-b border-indigo-200 pb-2">
-                        <h4 class="font-bold text-indigo-900 text-base">Eğitimde Yapay Zeka Dönüşümü ve Öğretmenin Rolü</h4>
-                        <span class="text-[10px] text-indigo-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
-                    </div>
-                    <p class="leading-relaxed text-slate-700 space-y-2">
-                        Yapay zeka araçları, günümüz sınıf ortamlarında öğretmenlerin iş yükünü hafifletirken öğrencilere bireysel hızlarında öğrenme fırsatı sunmaktadır. Dijital içerik üretimi, kişiselleştirilmiş değerlendirme mekanizmaları ve NotebookLM gibi akıllı platformlar sayesinde ders içi etkileşim en üst düzeye çıkmaktadır. Öğretmen, bilginin tek kaynağı olmaktan çıkıp rehber ve kolaylaştırıcı konumuna evrilmektedir.
-                    </p>
-                </div>
-
-                <div id="art2" class="hidden mt-4 p-5 bg-emerald-50/80 border border-emerald-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art2')">
-                    <div class="flex justify-between items-center mb-2 border-b border-emerald-200 pb-2">
-                        <h4 class="font-bold text-emerald-900 text-base">Değerler Eğitimi ve Karakter Gelişimi</h4>
-                        <span class="text-[10px] text-emerald-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
-                    </div>
-                    <p class="leading-relaxed text-slate-700">
-                        Ahlaki gelişim ve değerler eğitimi, çağdaş eğitim sistemlerinin ayrılmaz bir parçasıdır. Saygı, sorumluluk, adalet ve empati gibi evrensel değerler; simülasyonlar, örnek olay analizleri ve sinema filmleri pedagojik birer araç olarak kullanılarak işlendiğinde öğrencilerde kalıcı davranış değişiklikleri meydana gelmektedir.
-                    </p>
-                </div>
-
-                <div id="art3" class="hidden mt-4 p-5 bg-amber-50/80 border border-amber-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art3')">
-                    <div class="flex justify-between items-center mb-2 border-b border-amber-200 pb-2">
-                        <h4 class="font-bold text-amber-900 text-base">Eğitimde Oyunlaştırma Teknikleri</h4>
-                        <span class="text-[10px] text-amber-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
-                    </div>
-                    <p class="leading-relaxed text-slate-700">
-                        Oyunlaştırma, oyun mekaniklerinin eğitim ortamlarına entegre edilerek öğrenme motivasyonunun artırılmasıdır. Puan, rozet, liderlik tabloları ve etkileşimli dijital araçlar (LearningApps vb.) kullanılarak yapılan dersler, öğrencilerin pasif dinleyici konumundan aktif katılımcı konumuna geçmesini sağlar.
-                    </p>
-                </div>
-
-                <div id="art4" class="hidden mt-4 p-5 bg-purple-50/80 border border-purple-200 rounded-xl text-xs sm:text-sm cursor-pointer" onclick="toggleArticle('art4')">
-                    <div class="flex justify-between items-center mb-2 border-b border-purple-200 pb-2">
-                        <h4 class="font-bold text-purple-900 text-base">Öğrenci Odaklı Çağdaş Rehberlik</h4>
-                        <span class="text-[10px] text-purple-600 bg-white px-2 py-0.5 rounded font-bold">Kapatmak için tıklayın</span>
-                    </div>
-                    <p class="leading-relaxed text-slate-700">
-                        Her öğrencinin öğrenme hızı, stili ve zeka alanı birbirinden farklıdır. Çağdaş rehberlik yaklaşımları, öğrencinin özgüvenini artırmayı ve kendini gerçekleştirme yolculuğunda ona rehberlik etmeyi hedefler. Sınıf içi olumlu iklim oluşturulması akademik başarıyı doğrudan tetikler.
-                    </p>
                 </div>
             </div>
         </section>
 
-        <!-- PLAN SAYFASI (40 WEEKS BUTTONS - 5 PER ROW) -->
+        <!-- PLAN SAYFASI (LARGER TEXT BUTTONS & EXPANDABLE POPUP) -->
         <section id="view-plan" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
@@ -352,7 +341,7 @@
             </div>
         </section>
 
-        <!-- BU HAFTA SAYFASI (40 WEEKS BUTTONS - 5 PER ROW) -->
+        <!-- BU HAFTA SAYFASI (LINKS IN POPUP TO EXTERNAL WEBSITES) -->
         <section id="view-thisweek" class="hidden space-y-4">
             <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200/80">
                 <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
@@ -668,22 +657,24 @@
         </div>
     </div>
 
-    <!-- MODAL POPUP FOR WEEKLY PLAN DETAILS -->
+    <!-- EXPANDABLE & SCROLLABLE MODAL POPUP FOR WEEKLY PLAN & THIS WEEK -->
     <div id="week-detail-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3">
-        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
-            <div class="p-4 bg-indigo-800 text-white flex justify-between items-center">
-                <h3 id="week-modal-title" class="font-bold text-sm flex items-center gap-2">
+        <div class="bg-white max-w-[90%] w-full rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="p-4 bg-indigo-800 text-white flex justify-between items-center shrink-0">
+                <h3 id="week-modal-title" class="font-bold text-sm sm:text-base flex items-center gap-2">
                     <i class="fa-solid fa-calendar-day text-amber-300"></i> Hafta Detayı
                 </h3>
                 <button onclick="closeWeekModal()" class="text-indigo-200 hover:text-white p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <div class="p-5 text-xs sm:text-sm text-slate-800 space-y-3 overflow-y-auto">
-                <div id="week-modal-content" class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 font-mono leading-relaxed whitespace-pre-line text-slate-800"></div>
+            
+            <div class="p-4 sm:p-6 text-xs sm:text-sm text-slate-800 space-y-3 overflow-y-auto flex-grow">
+                <div id="week-modal-content" class="bg-indigo-50/50 p-4 sm:p-5 rounded-xl border border-indigo-100 leading-snug text-slate-800"></div>
             </div>
-            <div class="p-3 bg-slate-50 border-t flex justify-end">
-                <button onclick="closeWeekModal()" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg">Kapat</button>
+            
+            <div class="p-3 bg-slate-50 border-t flex justify-end shrink-0">
+                <button onclick="closeWeekModal()" class="px-5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold rounded-lg transition">Kapat</button>
             </div>
         </div>
     </div>
@@ -799,8 +790,8 @@
             else if (tabKey === 'courses') { renderCourses(); }
             else if (tabKey === 'school') { loadSchoolForm(); }
             else if (tabKey === 'schedule') { renderSchedule(); }
-            else if (tabKey === 'plan') { renderPlanButtons('plan-buttons-grid'); }
-            else if (tabKey === 'thisweek') { renderPlanButtons('thisweek-buttons-grid'); }
+            else if (tabKey === 'plan') { renderPlanButtons('plan-buttons-grid', 'plan'); }
+            else if (tabKey === 'thisweek') { renderPlanButtons('thisweek-buttons-grid', 'thisweek'); }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -812,14 +803,24 @@
             renderStudents();
         });
 
-        // --- KİTAPLIK ARTICLE TOGGLE ---
+        // --- KİTAPLIK ARTICLE TOGGLE (ONLY ONE OPEN AT A TIME) ---
         function toggleArticle(id) {
-            const art = document.getElementById(id);
-            if (art) art.classList.toggle('hidden');
+            const targetArt = document.getElementById(id);
+            const isCurrentlyHidden = targetArt.classList.contains('hidden');
+
+            // Close all articles first
+            document.querySelectorAll('.article-content').forEach(art => {
+                art.classList.add('hidden');
+            });
+
+            // Open clicked if it was hidden
+            if (isCurrentlyHidden) {
+                targetArt.classList.remove('hidden');
+            }
         }
 
         // --- PLAN & BU HAFTA BUTTONS (40 WEEKS) ---
-        function renderPlanButtons(containerId) {
+        function renderPlanButtons(containerId, type) {
             const grid = document.getElementById(containerId);
             if (!grid) return;
             grid.innerHTML = '';
@@ -832,20 +833,66 @@
                 let dateStr = currentWeekDate.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
 
                 grid.innerHTML += `
-                    <button onclick="openWeekModal(${i}, '${dateStr}')" class="p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-xl transition text-center shadow-sm group">
-                        <div class="text-xs font-bold text-indigo-700 group-hover:text-indigo-900">${i}. Hafta</div>
-                        <div class="text-[10px] text-slate-500 mt-0.5">${dateStr}</div>
+                    <button onclick="openWeekModal(${i}, '${dateStr}', '${type}')" class="p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-200 hover:border-indigo-300 rounded-xl transition text-center shadow-sm group">
+                        <div class="text-sm font-bold text-indigo-700 group-hover:text-indigo-900">${i}. Hafta</div>
+                        <div class="text-xs text-slate-500 mt-1 font-medium">${dateStr}</div>
                     </button>
                 `;
             }
         }
 
-        function openWeekModal(weekNum, dateStr) {
+        function openWeekModal(weekNum, dateStr, type) {
             document.getElementById('week-modal-title').innerHTML = `<i class="fa-solid fa-calendar-day text-amber-300"></i> ${weekNum}. Hafta / ${dateStr}`;
             
-            const textContent = `${weekNum}. Hafta / ${dateStr}\n\n5. Sınıf Din Kültürü ve Ahlak Bilgisi\n5.1.1. Evrendeki mükemmel düzene ilişkin akıl yürütebilme çalışmaları yapıldı.\n\n6. Sınıf Din Kültürü ve Ahlak Bilgisi\n6.1.1. Evrendeki mükemmel düzeni gözlem yoluyla fark edip Allah'ın (cc) varlığı ve birliğini gözleme dayalı tahmin edebilme.`;
+            let linksHtml = '';
             
-            document.getElementById('week-modal-content').innerText = textContent;
+            if (type === 'thisweek') {
+                if (weekNum === 1) {
+                    linksHtml = `
+                        <div class="mt-4 pt-3 border-t border-indigo-200/60">
+                            <h5 class="font-bold text-indigo-900 text-xs mb-2">Haftalık Faydalı Bağlantılar:</h5>
+                            <div class="flex flex-col gap-1.5">
+                                <a href="https://www.meb.gov.tr" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold flex items-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> MEB Resmi Portalı</a>
+                                <a href="https://www.eba.gov.tr" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold flex items-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Eğitim Bilişim Ağı (EBA)</a>
+                            </div>
+                        </div>
+                    `;
+                } else if (weekNum === 2) {
+                    linksHtml = `
+                        <div class="mt-4 pt-3 border-t border-indigo-200/60">
+                            <h5 class="font-bold text-indigo-900 text-xs mb-2">Haftalık Faydalı Bağlantılar:</h5>
+                            <div class="flex flex-col gap-1.5">
+                                <a href="https://dogm.meb.gov.tr" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold flex items-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Din Öğretimi Genel Müdürlüğü Portalı</a>
+                                <a href="https://www.diyanet.gov.tr" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold flex items-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Diyanet İşleri Başkanlığı</a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    linksHtml = `
+                        <div class="mt-4 pt-3 border-t border-indigo-200/60">
+                            <h5 class="font-bold text-indigo-900 text-xs mb-2">Haftalık Faydalı Bağlantılar:</h5>
+                            <a href="https://dogm.meb.gov.tr" target="_blank" class="text-indigo-600 hover:text-indigo-800 underline font-semibold flex items-center gap-1.5"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Din Öğretimi Materyal Portalı</a>
+                        </div>
+                    `;
+                }
+            }
+
+            const htmlContent = `
+                <div class="font-semibold text-slate-900 mb-2">${weekNum}. Hafta / ${dateStr}</div>
+                <div class="space-y-2">
+                    <div>
+                        <strong class="font-bold text-indigo-900">5. Sınıf Din Kültürü ve Ahlak Bilgisi</strong>
+                        <p class="text-slate-700 mt-0.5">5.1.1. Evrendeki mükemmel düzene ilişkin akıl yürütebilme çalışmaları yapıldı.</p>
+                    </div>
+                    <div>
+                        <strong class="font-bold text-indigo-900">6. Sınıf Din Kültürü ve Ahlak Bilgisi</strong>
+                        <p class="text-slate-700 mt-0.5">6.1.1. Evrendeki mükemmel düzeni gözlem yoluyla fark edip Allah'ın (cc) varlığı ve birliğini gözleme dayalı tahmin edebilme.</p>
+                    </div>
+                </div>
+                ${linksHtml}
+            `;
+            
+            document.getElementById('week-modal-content').innerHTML = htmlContent;
             document.getElementById('week-detail-modal').classList.remove('hidden');
         }
 

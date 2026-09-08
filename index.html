@@ -6,8 +6,10 @@
     <title>Okul Yönetim Sistemi - Öğrenme Köşesi</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- html2pdf.js CDN for A5 PDF Generation -->
+    <!-- html2pdf.js CDN for A4 PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- SheetJS CDN for Excel (.xlsx) Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,15 +19,15 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* A5 PDF Print Template Styling */
+        /* A4 PDF Print Template Styling */
         .a5-pdf-template {
-            width: 130mm;
-            padding: 6mm;
+            width: 190mm;
+            padding: 8mm;
             background: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #0f172a;
             box-sizing: border-box;
-            font-size: 8.5pt;
+            font-size: 10pt;
         }
 
         /* Exactly 3 Lines Text Truncation */
@@ -35,6 +37,20 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
+        /* ================================================
+           SAYFA GENELİ YAZI BÜYÜTME (%30)
+           Tailwind'in ürettiği metin boyutu sınıflarının
+           tamamı burada %30 büyütülerek eziliyor (override).
+           ================================================ */
+        .text-\[10px\]  { font-size: 13px   !important; }
+        .text-\[11px\]  { font-size: 14.3px !important; }
+        .text-xs        { font-size: 0.975rem  !important; } /* 12px -> 15.6px */
+        .text-sm         { font-size: 1.1375rem !important; } /* 14px -> 18.2px */
+        .text-base       { font-size: 1.3rem    !important; } /* 16px -> 20.8px */
+        .text-lg         { font-size: 1.4625rem !important; } /* 18px -> 23.4px */
+        .text-xl         { font-size: 1.625rem  !important; } /* 20px -> 26px */
+        .text-3xl        { font-size: 2.4375rem !important; } /* 30px -> 39px */
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col relative">
@@ -160,7 +176,7 @@
                 <div class="max-w-3xl">
                     <span class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 font-semibold text-xs rounded-full mb-3 border border-indigo-100">Muammer BOZER</span>
                     <h2 class="text-xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Eğitim Yönetim Portalına Hoş Geldiniz</h2>
-                    <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">Sınıf, ders, öğrenci, ders programı ve not kaydı işlemlerinizi hızlıca gerçekleştirebilir; A5 boyutunda dikey PDF raporları oluşturabilirsiniz.</p>
+                    <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">Sınıf, ders, öğrenci, ders programı ve not kaydı işlemlerinizi hızlıca gerçekleştirebilir; A4 boyutunda dikey PDF raporları oluşturabilir; Excel ve Word olarak da dışa aktarabilirsiniz.</p>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 mt-6">
@@ -192,6 +208,28 @@
                             <div class="text-[11px] text-slate-500 font-medium">Girilen Not</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- VERİ YÖNETİMİ: YEDEKLE / GÜNCELLE -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                <h3 class="text-sm font-bold text-slate-800 mb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-indigo-600"></i> Veri Yedekleme ve Cihazlar Arası Aktarım
+                </h3>
+                <p class="text-xs text-slate-500 mb-3 leading-relaxed">
+                    Tüm veriler bu tarayıcıda (bu bilgisayarda) saklanır. Verileri başka bir bilgisayar veya telefonda da görebilmek için önce
+                    <strong>Yedekle</strong>'ye basıp dosyayı e-posta ile kendinize gönderin; diğer cihazda o dosyayı indirip
+                    <strong>Güncelle</strong> ile bu sayfaya yükleyin.
+                </p>
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="backupData()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i> Yedekle
+                    </button>
+                    <button onclick="document.getElementById('restore-file-input').click()" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold rounded-lg transition flex items-center gap-2">
+                        <i class="fa-solid fa-rotate"></i> Güncelle
+                    </button>
+                    <input type="file" id="restore-file-input" accept="application/json" class="hidden" onchange="restoreData(event)">
+                    <span id="backup-status" class="text-[11px] text-slate-500"></span>
                 </div>
             </div>
 
@@ -358,7 +396,13 @@
                             </button>
                             <button onclick="resetClassForm()" class="px-2.5 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-medium rounded-lg">İptal</button>
                             <button onclick="exportClassesPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
-                                <i class="fa-solid fa-print text-[10px]"></i> Yazdır
+                                <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                            </button>
+                            <button onclick="exportClassesExcel()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                                <i class="fa-solid fa-file-excel text-[10px]"></i> Excel
+                            </button>
+                            <button onclick="exportClassesWord()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                                <i class="fa-solid fa-file-word text-[10px]"></i> Word
                             </button>
                         </div>
                     </div>
@@ -427,7 +471,13 @@
                             <i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet
                         </button>
                         <button onclick="exportSchedulePDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
-                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF İndir
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </button>
+                        <button onclick="exportScheduleExcel()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-excel text-[10px]"></i> Excel
+                        </button>
+                        <button onclick="exportScheduleWord()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-word text-[10px]"></i> Word
                         </button>
                     </div>
                 </div>
@@ -487,7 +537,13 @@
                         </button>
                         <button onclick="resetStudentForm()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-medium rounded-lg">Temizle</button>
                         <button onclick="exportStudentsPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
-                            <i class="fa-solid fa-print text-[10px]"></i> Yazdır
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </button>
+                        <button onclick="exportStudentsExcel()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-excel text-[10px]"></i> Excel
+                        </button>
+                        <button onclick="exportStudentsWord()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-word text-[10px]"></i> Word
                         </button>
                     </div>
                 </div>
@@ -527,9 +583,17 @@
                     <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-clipboard-list text-purple-600"></i> Not & Değerlendirme Girişi
                     </h2>
-                    <button onclick="exportNotesPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1 shrink-0">
-                        <i class="fa-solid fa-print text-[10px]"></i> Yazdır
-                    </button>
+                    <div class="flex items-center gap-2 shrink-0">
+                        <button onclick="exportNotesPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
+                        </button>
+                        <button onclick="exportNotesExcel()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-excel text-[10px]"></i> Excel
+                        </button>
+                        <button onclick="exportNotesWord()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-word text-[10px]"></i> Word
+                        </button>
+                    </div>
                 </div>
 
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -719,6 +783,79 @@
                 content: "Her öğrencinin öğrenme hızı ve stili farklıdır. Çağdaş rehberlik yaklaşımları, öğrencinin özgüvenini artırmayı ve kendini gerçekleştirme yolculuğunda ona rehberlik etmeyi hedefler. Sınıf içi olumlu iklim akademik başarıyı doğrudan destekler."
             }
         };
+
+        // --- YEDEKLE / GÜNCELLE (CİHAZLAR ARASI VERİ AKTARIMI) ---
+        // NOT: Bu sayfa saf HTML/CSS/JS olduğu için (sunucusuz), tarayıcı güvenliği
+        // gereği bir web sayfası kendi başına otomatik e-posta gönderemez veya bir
+        // Gmail kutusunu okuyamaz. Bu yüzden "Yedekle" butonu; en güncel verileri tek
+        // bir dosyaya indirir ve e-posta uygulamanızı adres/açıklama dolu şekilde açar,
+        // siz sadece indirilen dosyayı sürükleyip eklersiniz. "Güncelle" ise diğer
+        // cihazda o dosyayı (e-postadan indirdiğiniz) seçmenizi ister ve verileri geri yükler.
+        const BACKUP_KEYS = ['sys_school', 'sys_classes', 'sys_courses', 'sys_students', 'sys_notes', 'sys_schedule', 'sys_announcements', 'sys_events', 'sys_calendar'];
+        const BACKUP_EMAIL = 'muammerbozer76@gmail.com';
+
+        function backupData() {
+            const payload = { app: 'ogrenme-kosesi-yedek', exportedAt: new Date().toISOString(), data: {} };
+            BACKUP_KEYS.forEach(k => { payload.data[k] = JSON.parse(localStorage.getItem(k) || 'null'); });
+
+            const dateTag = new Date().toISOString().slice(0, 16).replace(/[-T:]/g, '');
+            const filename = `ogrenme_kosesi_yedek_${dateTag}.json`;
+
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            const subject = encodeURIComponent('Öğrenme Köşesi Yedek Dosyası - ' + new Date().toLocaleDateString('tr-TR'));
+            const body = encodeURIComponent(
+                `Merhaba,\n\nBiraz önce "${filename}" adlı yedek dosyası bilgisayarınıza indirildi.\n` +
+                `Bu e-postaya o dosyayı EK olarak ekleyip gönderin. Diğer cihazda bu e-postadan dosyayı indirip\n` +
+                `sayfadaki "Güncelle" butonuyla yükleyebilirsiniz.\n\nÖğrenme Köşesi Otomasyonu`
+            );
+            window.location.href = `mailto:${BACKUP_EMAIL}?subject=${subject}&body=${body}`;
+
+            const statusEl = document.getElementById('backup-status');
+            if (statusEl) statusEl.textContent = `"${filename}" indirildi. Şimdi açılan e-postaya dosyayı ekleyip gönderin.`;
+        }
+
+        function restoreData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                let payload;
+                try {
+                    payload = JSON.parse(e.target.result);
+                } catch (err) {
+                    alert('Dosya okunamadı. Lütfen geçerli bir yedek (.json) dosyası seçin.');
+                    event.target.value = '';
+                    return;
+                }
+                if (!payload || !payload.data) {
+                    alert('Bu dosya geçerli bir Öğrenme Köşesi yedeği değil.');
+                    event.target.value = '';
+                    return;
+                }
+                const tarih = payload.exportedAt ? new Date(payload.exportedAt).toLocaleString('tr-TR') : 'bilinmiyor';
+                if (!confirm(`Bu cihazdaki mevcut veriler, ${tarih} tarihli yedekle DEĞİŞTİRİLECEK. Devam edilsin mi?`)) {
+                    event.target.value = '';
+                    return;
+                }
+                BACKUP_KEYS.forEach(k => {
+                    if (payload.data[k] !== undefined && payload.data[k] !== null) {
+                        localStorage.setItem(k, JSON.stringify(payload.data[k]));
+                    }
+                });
+                alert('Veriler başarıyla güncellendi. Sayfa yeniden yüklenecek.');
+                location.reload();
+            };
+            reader.readAsText(file);
+        }
 
         function saveToStorage() {
             localStorage.setItem('sys_school', JSON.stringify(state.school));
@@ -1268,7 +1405,7 @@
             alert('Haftalık ders programı kaydedildi!');
         }
 
-        function exportSchedulePDF() {
+        function buildScheduleReport() {
             let html = `
                 <table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:7pt; text-align:center; table-layout:fixed;">
                     <thead>
@@ -1296,7 +1433,20 @@
                 html += `</tr>`;
             });
             html += `</tbody></table>`;
-            generateA5PDF("HAFTALIK DERS PROGRAMI", html, "haftalik_ders_programi_a5.pdf");
+            return { title: "HAFTALIK DERS PROGRAMI", html };
+        }
+
+        function exportSchedulePDF() {
+            const { title, html } = buildScheduleReport();
+            generateReportPDF(title, html, "haftalik_ders_programi.pdf");
+        }
+        function exportScheduleExcel() {
+            const { title, html } = buildScheduleReport();
+            downloadTableAsExcel(title, html, "haftalik_ders_programi.xlsx");
+        }
+        function exportScheduleWord() {
+            const { title, html } = buildScheduleReport();
+            downloadTableAsWord(title, html, "haftalik_ders_programi.doc");
         }
 
         // --- STUDENTS ---
@@ -1552,7 +1702,7 @@
             return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
 
-        function generateA5PDF(reportTitle, tableHtml, filename) {
+        function generateReportPDF(reportTitle, tableHtml, filename) {
             document.getElementById('pdf-school-title').textContent = state.school.name || 'OKUL ADI BELİRTİLMEDİ';
             document.getElementById('pdf-report-title').textContent = reportTitle;
             document.getElementById('pdf-teacher-name').textContent = state.school.teacher || '-';
@@ -1564,11 +1714,11 @@
             element.parentElement.classList.remove('hidden');
 
             const opt = {
-                margin: [4, 4, 4, 4],
+                margin: [8, 8, 8, 8],
                 filename: filename || 'rapor.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, logging: false, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().set(opt).from(element).save().then(() => {
@@ -1579,16 +1729,29 @@
             });
         }
 
-        function exportClassesPDF() {
+        function buildClassesReport() {
             let html = `<table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:8pt;"><thead><tr style="background:#f1f5f9;"><th style="padding:4px; border:0.5px solid #cbd5e1; width:30px;">#</th><th style="padding:4px; border:0.5px solid #cbd5e1;">Sınıf Adı</th></tr></thead><tbody>`;
             [...state.classes].sort((a,b)=>a.name.localeCompare(b.name, 'tr')).forEach((c, idx) => {
                 html += `<tr><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${idx + 1}</td><td style="padding:3px; border:0.5px solid #e2e8f0;">${escapeHtml(c.name)}</td></tr>`;
             });
             html += `</tbody></table>`;
-            generateA5PDF("SINIF LİSTESİ RAPORU", html, "sinif_listesi_a5.pdf");
+            return { title: "SINIF LİSTESİ RAPORU", html };
         }
 
-        function exportStudentsPDF() {
+        function exportClassesPDF() {
+            const { title, html } = buildClassesReport();
+            generateReportPDF(title, html, "sinif_listesi.pdf");
+        }
+        function exportClassesExcel() {
+            const { title, html } = buildClassesReport();
+            downloadTableAsExcel(title, html, "sinif_listesi.xlsx");
+        }
+        function exportClassesWord() {
+            const { title, html } = buildClassesReport();
+            downloadTableAsWord(title, html, "sinif_listesi.doc");
+        }
+
+        function buildStudentsReport() {
             const filterClass = document.getElementById('filter-student-class').value;
             let title = filterClass ? `${filterClass} SINIFI ÖĞRENCİ LİSTESİ` : "TÜM ÖĞRENCİLER LİSTESİ";
             let html = `<table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:7.5pt;"><thead><tr style="background:#f1f5f9;"><th style="padding:3px; border:0.5px solid #cbd5e1; width:25px;">#</th><th style="padding:3px; border:0.5px solid #cbd5e1;">Adı Soyadı</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:35px;">Sınıf</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:40px;">Okul No</th></tr></thead><tbody>`;
@@ -1597,13 +1760,26 @@
                 html += `<tr><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${idx + 1}</td><td style="padding:3px; border:0.5px solid #e2e8f0;">${escapeHtml(s.firstName)} ${escapeHtml(s.lastName)}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(s.className)}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(s.number)}</td></tr>`;
             });
             html += `</tbody></table>`;
-            generateA5PDF(title, html, "ogrenci_listesi_a5.pdf");
+            return { title, html };
         }
 
-        function exportNotesPDF() {
+        function exportStudentsPDF() {
+            const { title, html } = buildStudentsReport();
+            generateReportPDF(title, html, "ogrenci_listesi.pdf");
+        }
+        function exportStudentsExcel() {
+            const { title, html } = buildStudentsReport();
+            downloadTableAsExcel(title, html, "ogrenci_listesi.xlsx");
+        }
+        function exportStudentsWord() {
+            const { title, html } = buildStudentsReport();
+            downloadTableAsWord(title, html, "ogrenci_listesi.doc");
+        }
+
+        function buildNotesReport() {
             const className = document.getElementById('notes-class-select').value;
             const courseId = document.getElementById('notes-course-select').value;
-            if (!className || !courseId) { alert('Lütfen Sınıf ve Dersi seçiniz!'); return; }
+            if (!className || !courseId) { alert('Lütfen Sınıf ve Dersi seçiniz!'); return null; }
 
             const courseObj = state.courses.find(c => c.id === courseId);
             const title = `${className} SINIFI - ${(courseObj ? courseObj.name : '').toUpperCase()} NOT LİSTESİ`;
@@ -1614,7 +1790,63 @@
                 html += `<tr><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${idx + 1}</td><td style="padding:3px; border:0.5px solid #e2e8f0;">${escapeHtml(s.firstName)} ${escapeHtml(s.lastName)}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(s.number)}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.y1 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.y2 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.p1 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.p2 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0;">${escapeHtml(grade.pr || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center; font-weight:bold;">${escapeHtml(grade.avg || '-')}</td></tr>`;
             });
             html += `</tbody></table>`;
-            generateA5PDF(title, html, `${className}_not_listesi_a5.pdf`);
+            return { title, html, className };
+        }
+
+        function exportNotesPDF() {
+            const r = buildNotesReport();
+            if (!r) return;
+            generateReportPDF(r.title, r.html, `${r.className}_not_listesi.pdf`);
+        }
+        function exportNotesExcel() {
+            const r = buildNotesReport();
+            if (!r) return;
+            downloadTableAsExcel(r.title, r.html, `${r.className}_not_listesi.xlsx`);
+        }
+        function exportNotesWord() {
+            const r = buildNotesReport();
+            if (!r) return;
+            downloadTableAsWord(r.title, r.html, `${r.className}_not_listesi.doc`);
+        }
+
+        // --- EXCEL / WORD DIŞA AKTARMA YARDIMCILARI ---
+        function downloadTableAsExcel(title, tableHtml, filename) {
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'none';
+            wrapper.innerHTML = tableHtml;
+            document.body.appendChild(wrapper);
+            const table = wrapper.querySelector('table');
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.table_to_sheet(table);
+            XLSX.utils.book_append_sheet(wb, ws, (title || 'Rapor').substring(0, 28));
+            XLSX.writeFile(wb, filename || 'rapor.xlsx');
+            document.body.removeChild(wrapper);
+        }
+
+        function downloadTableAsWord(title, tableHtml, filename) {
+            const schoolName = escapeHtml(state.school.name || 'OKUL ADI BELİRTİLMEDİ');
+            const dateStr = new Date().toLocaleDateString('tr-TR');
+            const preHtml = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                <head><meta charset='utf-8'><title>${escapeHtml(title || 'Rapor')}</title>
+                <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->
+                </head>
+                <body style="font-family:'Segoe UI',Tahoma,Arial,sans-serif;">
+                    <h2 style="margin-bottom:2px;">${schoolName}</h2>
+                    <h3 style="margin-top:0; color:#334155;">${escapeHtml(title || '')}</h3>
+                    <p style="font-size:10pt; color:#64748b;">Tarih: ${dateStr}</p>
+                    ${tableHtml}
+                </body></html>
+            `;
+            const blob = new Blob(['\ufeff', preHtml], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename || 'rapor.doc';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>

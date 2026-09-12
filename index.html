@@ -531,7 +531,11 @@
                         </div>
                     </div>
 
-                    <div class="flex items-center justify-end gap-2 pt-1 border-t border-slate-200">
+                    <div class="flex items-center justify-end gap-2 pt-1 border-t border-slate-200 flex-wrap">
+                        <button onclick="document.getElementById('eokul-file-input').click()" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-arrow-up text-[10px]"></i> E-Okuldan Yükle
+                        </button>
+                        <input type="file" id="eokul-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="eokulDosyasiYuklendi(event)">
                         <button onclick="saveStudent()" id="btn-save-student" class="px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
                             <i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet
                         </button>
@@ -583,7 +587,11 @@
                     <h2 class="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-clipboard-list text-purple-600"></i> Not & Değerlendirme Girişi
                     </h2>
-                    <div class="flex items-center gap-2 shrink-0">
+                    <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                        <button onclick="notEokulButonaTiklandi()" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
+                            <i class="fa-solid fa-file-arrow-up text-[10px]"></i> E-Okuldan Al
+                        </button>
+                        <input type="file" id="not-eokul-file-input" accept=".xlsx,.xls,.csv" class="hidden" onchange="notEokulDosyasiYuklendi(event)">
                         <button onclick="exportNotesPDF()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium rounded-lg transition flex items-center gap-1">
                             <i class="fa-solid fa-file-pdf text-[10px]"></i> PDF
                         </button>
@@ -1199,7 +1207,7 @@
         // --- SCHOOL HEADER & FORM ---
         function renderSchoolHeader() {
             document.getElementById('header-school-name').textContent = state.school.name || 'Okul Adı Belirtilmedi';
-            document.getElementById('header-subtitle').textContent = (state.school.year || '') + ' Eğitim - Öğretim Yılı';
+            document.getElementById('header-subtitle').textContent = state.school.year || 'Eğitim - Öğretim Yılı Paneli';
             document.getElementById('header-teacher-name').textContent = state.school.teacher || '-';
             document.getElementById('header-principal-name').textContent = state.school.principal || '-';
             document.getElementById('header-year').textContent = state.school.year || '-';
@@ -1539,6 +1547,130 @@
             document.getElementById('btn-save-student').innerHTML = `<i class="fa-solid fa-floppy-disk text-[10px]"></i> Kaydet`;
         }
 
+        // --- E-OKUL EXCEL İÇE AKTARMA ---
+        function trLower(s) {
+            return String(s == null ? '' : s).toLocaleLowerCase('tr-TR').trim();
+        }
+
+        function eokulDosyasiYuklendi(event) {
+            const dosya = event.target.files[0];
+            if (!dosya) return;
+            const okuyucu = new FileReader();
+            okuyucu.onload = function (e) {
+                try {
+                    const veri = new Uint8Array(e.target.result);
+                    const kitap = XLSX.read(veri, { type: 'array' });
+                    eokulKitabiniIsle(kitap);
+                } catch (err) {
+                    console.error(err);
+                    alert('Dosya okunamadı. Lütfen e-Okuldan alınmış geçerli bir Excel (.xlsx/.xls) dosyası seçtiğinizden emin olun.');
+                }
+                event.target.value = '';
+            };
+            okuyucu.onerror = function () {
+                alert('Dosya okunurken bir hata oluştu.');
+                event.target.value = '';
+            };
+            okuyucu.readAsArrayBuffer(dosya);
+        }
+
+        function eokulKitabiniIsle(kitap) {
+            const yeniOgrenciler = [];
+            let bulunanSatir = 0;
+
+            kitap.SheetNames.forEach(sayfaAdi => {
+                const sayfa = kitap.Sheets[sayfaAdi];
+                const satirlar = XLSX.utils.sheet_to_json(sayfa, { header: 1, defval: '', blankrows: false });
+                if (!satirlar.length) return;
+
+                // Başlık satırını bul (ilk 20 satır içinde "Adı" / "Adı Soyadı" gibi bir hücre ara)
+                let baslikIdx = -1, sutun = {};
+                for (let i = 0; i < Math.min(20, satirlar.length); i++) {
+                    const satir = satirlar[i];
+                    const eslesen = {};
+                    satir.forEach((hucre, j) => {
+                        const h = trLower(hucre);
+                        if (!h) return;
+                        if (/ad.*soyad/.test(h)) eslesen.tamAd = j;
+                        else if (h === 'adı' || h === 'adi' || h === 'ad' || h === 'öğrenci adı') eslesen.ad = j;
+                        else if (h.includes('soyad')) eslesen.soyad = j;
+                        else if (h.includes('sınıf') || h.includes('sinif') || h.includes('şube') || h.includes('sube')) eslesen.sinif = j;
+                        else if (h.includes('no') && !h.includes('sıra') && !h.includes('sira')) eslesen.no = j;
+                    });
+                    if (eslesen.tamAd !== undefined || eslesen.ad !== undefined) {
+                        baslikIdx = i; sutun = eslesen; break;
+                    }
+                }
+                if (baslikIdx === -1) return; // bu sayfada öğrenci tablosu bulunamadı
+
+                let sayfaSinifAdi = null; // sınıf sütunu yoksa, gerekirse bir kere sorulacak
+                for (let i = baslikIdx + 1; i < satirlar.length; i++) {
+                    const satir = satirlar[i];
+                    if (!satir || satir.every(h => trLower(h) === '')) continue;
+
+                    let ad = '', soyad = '';
+                    if (sutun.tamAd !== undefined) {
+                        const parcalar = String(satir[sutun.tamAd] || '').trim().split(/\s+/).filter(Boolean);
+                        if (parcalar.length) { soyad = parcalar.pop(); ad = parcalar.join(' '); }
+                    } else {
+                        ad = String(satir[sutun.ad] || '').trim();
+                        soyad = sutun.soyad !== undefined ? String(satir[sutun.soyad] || '').trim() : '';
+                    }
+                    if (!ad && !soyad) continue;
+
+                    let sinifAdi = sutun.sinif !== undefined ? String(satir[sutun.sinif] || '').trim() : '';
+                    if (!sinifAdi) {
+                        if (sayfaSinifAdi === null) {
+                            const varsayilan = /^[0-9]+[\-\/][A-Za-zÇĞİÖŞÜçğıöşü]+$/.test(sayfaAdi.trim()) ? sayfaAdi.trim() : '';
+                            sayfaSinifAdi = prompt('"' + sayfaAdi + '" sayfasındaki öğrenciler hangi sınıfa eklensin?', varsayilan) || '';
+                        }
+                        sinifAdi = sayfaSinifAdi.trim();
+                    }
+                    if (!sinifAdi) continue; // sınıf belirtilmeden öğrenci eklenmez
+
+                    const no = sutun.no !== undefined ? String(satir[sutun.no] || '').trim() : '';
+                    yeniOgrenciler.push({ ad, soyad, sinifAdi, no });
+                    bulunanSatir++;
+                }
+            });
+
+            if (!bulunanSatir) {
+                alert('Dosyada okunabilecek bir öğrenci listesi bulunamadı. Lütfen "Adı" / "Adı Soyadı" başlıklı bir e-Okul listesi seçin.');
+                return;
+            }
+
+            // Eksik sınıfları oluştur
+            const mevcutSiniflar = new Set(state.classes.map(c => trLower(c.name)));
+            let eklenenSinif = 0;
+            const kullanilanSiniflar = [...new Set(yeniOgrenciler.map(o => o.sinifAdi))];
+            kullanilanSiniflar.forEach(sinifAdi => {
+                if (!mevcutSiniflar.has(trLower(sinifAdi))) {
+                    state.classes.push({ id: 'c_' + Date.now() + '_' + Math.floor(Math.random() * 10000), name: sinifAdi });
+                    mevcutSiniflar.add(trLower(sinifAdi));
+                    eklenenSinif++;
+                }
+            });
+
+            // Mevcut öğrencilerle çakışanları atlayarak yeni öğrencileri ekle
+            const mevcutOgrenciler = new Set(state.students.map(s => trLower(s.firstName + '|' + s.lastName + '|' + s.className)));
+            let eklenenOgrenci = 0, atlananOgrenci = 0;
+            yeniOgrenciler.forEach((o, idx) => {
+                const anahtar = trLower(o.ad + '|' + o.soyad + '|' + o.sinifAdi);
+                if (mevcutOgrenciler.has(anahtar)) { atlananOgrenci++; return; }
+                mevcutOgrenciler.add(anahtar);
+                state.students.push({ id: 's_' + Date.now() + '_' + idx, firstName: o.ad, lastName: o.soyad, className: o.sinifAdi, number: o.no });
+                eklenenOgrenci++;
+            });
+
+            saveToStorage();
+            populateClassDropdowns();
+            renderClasses();
+            renderStudents();
+            updateDashboardStats();
+
+            alert('E-Okul aktarımı tamamlandı.\n\nEklenen sınıf: ' + eklenenSinif + '\nEklenen öğrenci: ' + eklenenOgrenci + (atlananOgrenci ? '\nZaten kayıtlı olduğu için atlanan: ' + atlananOgrenci : ''));
+        }
+
         // --- NOTES & CALCULATION ---
         function populateNotesDropdowns() {
             const classSelect = document.getElementById('notes-class-select');
@@ -1582,7 +1714,7 @@
             container.innerHTML = '';
             classStudents.forEach((std, idx) => {
                 const noteKey = `${std.id}_${courseId}`;
-                const gradeData = state.notes[noteKey] || { y1: '', y2: '', p1: '', p2: '', pr: '', avg: '' };
+                const gradeData = state.notes[noteKey] || { y1: '', y2: '', y3: '', p1: '', p2: '', p3: '', u1: '', u2: '', pr: '', avg: '' };
 
                 container.innerHTML += `
                     <div class="border border-slate-200 rounded-xl bg-white overflow-hidden shadow-sm">
@@ -1603,11 +1735,15 @@
                         </div>
 
                         <div id="grade-form-${std.id}" class="hidden p-3 border-t border-slate-200 bg-purple-50/30 space-y-2">
-                            <div class="grid grid-cols-2 sm:grid-cols-6 gap-2">
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2">
                                 <div><label class="block text-[10px] font-bold text-slate-600">1. Yazılı</label><input type="number" id="grade-y1-${std.id}" value="${escapeHtml(gradeData.y1)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
                                 <div><label class="block text-[10px] font-bold text-slate-600">2. Yazılı</label><input type="number" id="grade-y2-${std.id}" value="${escapeHtml(gradeData.y2)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">3. Yazılı</label><input type="number" id="grade-y3-${std.id}" value="${escapeHtml(gradeData.y3)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
                                 <div><label class="block text-[10px] font-bold text-slate-600">1. Perf</label><input type="number" id="grade-p1-${std.id}" value="${escapeHtml(gradeData.p1)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
                                 <div><label class="block text-[10px] font-bold text-slate-600">2. Perf</label><input type="number" id="grade-p2-${std.id}" value="${escapeHtml(gradeData.p2)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">3. Perf</label><input type="number" id="grade-p3-${std.id}" value="${escapeHtml(gradeData.p3)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">1. Uyg</label><input type="number" id="grade-u1-${std.id}" value="${escapeHtml(gradeData.u1)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
+                                <div><label class="block text-[10px] font-bold text-slate-600">2. Uyg</label><input type="number" id="grade-u2-${std.id}" value="${escapeHtml(gradeData.u2)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
                                 <div><label class="block text-[10px] font-bold text-slate-600">Proje</label><input type="number" id="grade-pr-${std.id}" value="${escapeHtml(gradeData.pr)}" oninput="calculateAvg('${std.id}')" placeholder="0-100" class="w-full px-2 py-1 border border-slate-300 rounded text-xs bg-white"></div>
                                 <div><label class="block text-[10px] font-bold text-purple-700">Ortalama</label><input type="text" id="grade-avg-${std.id}" value="${escapeHtml(gradeData.avg)}" readonly class="w-full px-2 py-1 border border-purple-300 rounded text-xs bg-purple-100 font-bold text-purple-900"></div>
                             </div>
@@ -1624,36 +1760,35 @@
         function calculateAvg(studentId) {
             const rawY1 = document.getElementById(`grade-y1-${studentId}`).value;
             const rawY2 = document.getElementById(`grade-y2-${studentId}`).value;
+            const rawY3 = document.getElementById(`grade-y3-${studentId}`).value;
             const rawP1 = document.getElementById(`grade-p1-${studentId}`).value;
             const rawP2 = document.getElementById(`grade-p2-${studentId}`).value;
+            const rawP3 = document.getElementById(`grade-p3-${studentId}`).value;
+            const rawU1 = document.getElementById(`grade-u1-${studentId}`).value;
+            const rawU2 = document.getElementById(`grade-u2-${studentId}`).value;
             const rawPR = document.getElementById(`grade-pr-${studentId}`).value;
 
-            const y1 = parseFloat(rawY1);
-            const y2 = parseFloat(rawY2);
-            const p1 = parseFloat(rawP1);
-            const p2 = parseFloat(rawP2);
-            const pr = parseFloat(rawPR);
+            function grupOrtalamasi(hamDegerler) {
+                const degerler = [];
+                hamDegerler.forEach(ham => {
+                    const sayi = parseFloat(ham);
+                    if (!isNaN(sayi) && String(ham).trim() !== '') degerler.push(sayi);
+                });
+                return degerler.length > 0 ? (degerler.reduce((a, b) => a + b, 0) / degerler.length) : null;
+            }
 
-            let examVals = [];
-            if (!isNaN(y1) && rawY1.trim() !== '') examVals.push(y1);
-            if (!isNaN(y2) && rawY2.trim() !== '') examVals.push(y2);
-            let examAvg = examVals.length > 0 ? (examVals.reduce((a, b) => a + b, 0) / examVals.length) : null;
+            // Önce her grubun kendi içindeki ortalaması alınır
+            const yaziliOrt = grupOrtalamasi([rawY1, rawY2, rawY3]);
+            const performansOrt = grupOrtalamasi([rawP1, rawP2, rawP3]);
+            const uygulamaOrt = grupOrtalamasi([rawU1, rawU2]);
+            const projeOrt = grupOrtalamasi([rawPR]);
 
-            let perfVals = [];
-            if (!isNaN(p1) && rawP1.trim() !== '') perfVals.push(p1);
-            if (!isNaN(p2) && rawP2.trim() !== '') perfVals.push(p2);
-            let perfAvg = perfVals.length > 0 ? (perfVals.reduce((a, b) => a + b, 0) / perfVals.length) : null;
+            // Sonra grup ortalamalarının genel ortalaması alınır
+            const gruplar = [yaziliOrt, performansOrt, uygulamaOrt, projeOrt].filter(v => v !== null);
 
-            let prVal = (!isNaN(pr) && rawPR.trim() !== '') ? pr : null;
-
-            let components = [];
-            if (examAvg !== null) components.push(examAvg);
-            if (perfAvg !== null) components.push(perfAvg);
-            if (prVal !== null) components.push(prVal);
-
-            if (components.length > 0) {
-                const finalAvg = (components.reduce((a, b) => a + b, 0) / components.length).toFixed(2);
-                document.getElementById(`grade-avg-${studentId}`).value = finalAvg;
+            if (gruplar.length > 0) {
+                const genelOrt = (gruplar.reduce((a, b) => a + b, 0) / gruplar.length).toFixed(2);
+                document.getElementById(`grade-avg-${studentId}`).value = genelOrt;
             } else {
                 document.getElementById(`grade-avg-${studentId}`).value = '';
             }
@@ -1669,15 +1804,171 @@
             if (!courseId) return;
             const y1 = document.getElementById(`grade-y1-${studentId}`).value.trim();
             const y2 = document.getElementById(`grade-y2-${studentId}`).value.trim();
+            const y3 = document.getElementById(`grade-y3-${studentId}`).value.trim();
             const p1 = document.getElementById(`grade-p1-${studentId}`).value.trim();
             const p2 = document.getElementById(`grade-p2-${studentId}`).value.trim();
+            const p3 = document.getElementById(`grade-p3-${studentId}`).value.trim();
+            const u1 = document.getElementById(`grade-u1-${studentId}`).value.trim();
+            const u2 = document.getElementById(`grade-u2-${studentId}`).value.trim();
             const pr = document.getElementById(`grade-pr-${studentId}`).value.trim();
             const avg = document.getElementById(`grade-avg-${studentId}`).value.trim();
 
-            state.notes[`${studentId}_${courseId}`] = { y1, y2, p1, p2, pr, avg };
+            state.notes[`${studentId}_${courseId}`] = { y1, y2, y3, p1, p2, p3, u1, u2, pr, avg };
             saveToStorage();
             toggleGradeForm(studentId);
             loadClassStudentsForNotes();
+        }
+
+        // --- E-OKUL NOT/DEĞERLENDİRME İÇE AKTARMA ---
+        function notEokulButonaTiklandi() {
+            const className = document.getElementById('notes-class-select').value;
+            const courseId = document.getElementById('notes-course-select').value;
+            if (!className || !courseId) { alert('Not aktarabilmek için önce Sınıf ve Ders seçiniz.'); return; }
+            document.getElementById('not-eokul-file-input').click();
+        }
+
+        function notEokulDosyasiYuklendi(event) {
+            const dosya = event.target.files[0];
+            if (!dosya) return;
+            const className = document.getElementById('notes-class-select').value;
+            const courseId = document.getElementById('notes-course-select').value;
+            if (!className || !courseId) { alert('Not aktarabilmek için önce Sınıf ve Ders seçiniz.'); event.target.value = ''; return; }
+
+            const okuyucu = new FileReader();
+            okuyucu.onload = function (e) {
+                try {
+                    const veri = new Uint8Array(e.target.result);
+                    const kitap = XLSX.read(veri, { type: 'array' });
+                    notEokulKitabiniIsle(kitap, className, courseId);
+                } catch (err) {
+                    console.error(err);
+                    alert('Dosya okunamadı. Lütfen e-Okuldan alınmış geçerli bir not/sınav listesi (.xlsx/.xls) seçtiğinizden emin olun.');
+                }
+                event.target.value = '';
+            };
+            okuyucu.onerror = function () {
+                alert('Dosya okunurken bir hata oluştu.');
+                event.target.value = '';
+            };
+            okuyucu.readAsArrayBuffer(dosya);
+        }
+
+        function notEokulKitabiniIsle(kitap, className, courseId) {
+            let baslikIdx = -1, sutun = {}, satirlar = [];
+
+            for (const sayfaAdi of kitap.SheetNames) {
+                const sayfa = kitap.Sheets[sayfaAdi];
+                const adaySatirlar = XLSX.utils.sheet_to_json(sayfa, { header: 1, defval: '', blankrows: false });
+                if (!adaySatirlar.length) continue;
+
+                let denemeIdx = -1, denemeSutun = {};
+                for (let i = 0; i < Math.min(20, adaySatirlar.length); i++) {
+                    const satir = adaySatirlar[i];
+                    const eslesen = {};
+                    let yaziliSayaci = 0, performansSayaci = 0, uygulamaSayaci = 0;
+                    satir.forEach((hucre, j) => {
+                        const h = trLower(hucre);
+                        if (!h) return;
+                        if (/ad.*soyad/.test(h)) eslesen.tamAd = j;
+                        else if (h === 'adı' || h === 'adi' || h === 'ad' || h === 'öğrenci adı') eslesen.ad = j;
+                        else if (h.includes('soyad')) eslesen.soyad = j;
+                        else if (h.includes('yazılı') || h.includes('yazili')) {
+                            yaziliSayaci++;
+                            if (yaziliSayaci === 1) eslesen.y1 = j; else if (yaziliSayaci === 2) eslesen.y2 = j; else if (yaziliSayaci === 3) eslesen.y3 = j;
+                        }
+                        else if (h.includes('performans')) {
+                            performansSayaci++;
+                            if (performansSayaci === 1) eslesen.p1 = j; else if (performansSayaci === 2) eslesen.p2 = j; else if (performansSayaci === 3) eslesen.p3 = j;
+                        }
+                        else if (h.includes('uygulama')) {
+                            uygulamaSayaci++;
+                            if (uygulamaSayaci === 1) eslesen.u1 = j; else if (uygulamaSayaci === 2) eslesen.u2 = j;
+                        }
+                        else if (h.includes('proje')) eslesen.pr = j;
+                        else if (h.includes('no') && !h.includes('sıra') && !h.includes('sira')) eslesen.no = j;
+                    });
+                    if (eslesen.tamAd !== undefined || eslesen.ad !== undefined) { denemeIdx = i; denemeSutun = eslesen; break; }
+                }
+                if (denemeIdx !== -1) { baslikIdx = denemeIdx; sutun = denemeSutun; satirlar = adaySatirlar; break; }
+            }
+
+            if (baslikIdx === -1) {
+                alert('Dosyada okunabilecek bir öğrenci/not listesi bulunamadı. Lütfen "Adı" veya "Adı Soyadı" başlıklı bir e-Okul listesi seçin.');
+                return;
+            }
+
+            const classStudents = state.students.filter(s => s.className === className);
+            const isimHaritasi = new Map();
+            classStudents.forEach(s => isimHaritasi.set(trLower(s.firstName + ' ' + s.lastName), s));
+            const noHaritasi = new Map();
+            classStudents.forEach(s => { if (s.number) noHaritasi.set(trLower(s.number), s); });
+
+            function grupOrt(vals) {
+                const d = [];
+                vals.forEach(v => {
+                    const sayi = parseFloat(v);
+                    if (!isNaN(sayi) && String(v).trim() !== '') d.push(sayi);
+                });
+                return d.length ? d.reduce((a, b) => a + b, 0) / d.length : null;
+            }
+            function readOrKeep(idx, satir, eski) {
+                if (idx === undefined) return eski;
+                const val = satir[idx];
+                return (val === undefined || val === null) ? '' : String(val).trim();
+            }
+
+            let guncellenen = 0, eslesmeyen = 0;
+            for (let i = baslikIdx + 1; i < satirlar.length; i++) {
+                const satir = satirlar[i];
+                if (!satir || satir.every(h => trLower(h) === '')) continue;
+
+                let adSoyad = '';
+                if (sutun.tamAd !== undefined) adSoyad = String(satir[sutun.tamAd] || '').trim();
+                else adSoyad = (String(satir[sutun.ad] || '').trim() + ' ' + (sutun.soyad !== undefined ? String(satir[sutun.soyad] || '').trim() : '')).trim();
+                if (!adSoyad) continue;
+
+                let ogrenci = isimHaritasi.get(trLower(adSoyad));
+                if (!ogrenci && sutun.no !== undefined) {
+                    const noDeger = trLower(satir[sutun.no]);
+                    if (noDeger) ogrenci = noHaritasi.get(noDeger);
+                }
+                if (!ogrenci) { eslesmeyen++; continue; }
+
+                const noteKey = `${ogrenci.id}_${courseId}`;
+                const mevcut = state.notes[noteKey] || { y1: '', y2: '', y3: '', p1: '', p2: '', p3: '', u1: '', u2: '', pr: '', avg: '' };
+
+                const yeni = {
+                    y1: readOrKeep(sutun.y1, satir, mevcut.y1),
+                    y2: readOrKeep(sutun.y2, satir, mevcut.y2),
+                    y3: readOrKeep(sutun.y3, satir, mevcut.y3),
+                    p1: readOrKeep(sutun.p1, satir, mevcut.p1),
+                    p2: readOrKeep(sutun.p2, satir, mevcut.p2),
+                    p3: readOrKeep(sutun.p3, satir, mevcut.p3),
+                    u1: readOrKeep(sutun.u1, satir, mevcut.u1),
+                    u2: readOrKeep(sutun.u2, satir, mevcut.u2),
+                    pr: readOrKeep(sutun.pr, satir, mevcut.pr)
+                };
+
+                const yaziliOrt = grupOrt([yeni.y1, yeni.y2, yeni.y3]);
+                const performansOrt = grupOrt([yeni.p1, yeni.p2, yeni.p3]);
+                const uygulamaOrt = grupOrt([yeni.u1, yeni.u2]);
+                const projeOrt = grupOrt([yeni.pr]);
+                const gruplar = [yaziliOrt, performansOrt, uygulamaOrt, projeOrt].filter(v => v !== null);
+                yeni.avg = gruplar.length ? (gruplar.reduce((a, b) => a + b, 0) / gruplar.length).toFixed(2) : '';
+
+                state.notes[noteKey] = yeni;
+                guncellenen++;
+            }
+
+            if (!guncellenen && !eslesmeyen) {
+                alert('Dosyada bu sınıfa ait okunabilecek not satırı bulunamadı.');
+                return;
+            }
+
+            saveToStorage();
+            loadClassStudentsForNotes();
+            updateDashboardStats();
+            alert('E-Okul not aktarımı tamamlandı.\n\nGüncellenen öğrenci: ' + guncellenen + (eslesmeyen ? '\nEşleşmeyen (atlanan) satır: ' + eslesmeyen + '\n(Bu öğrenciler önce Öğrenciler sayfasından bu sınıfa eklenmeli.)' : ''));
         }
 
         function deleteGradeNote(studentId) {
@@ -1783,11 +2074,11 @@
 
             const courseObj = state.courses.find(c => c.id === courseId);
             const title = `${className} SINIFI - ${(courseObj ? courseObj.name : '').toUpperCase()} NOT LİSTESİ`;
-            let html = `<table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:7pt;"><thead><tr style="background:#f1f5f9;"><th style="padding:3px; border:0.5px solid #cbd5e1; width:20px;">#</th><th style="padding:3px; border:0.5px solid #cbd5e1;">Adı Soyadı</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:28px;">No</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:28px;">1.Y</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:28px;">2.Y</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:28px;">1.P</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:28px;">2.P</th><th style="padding:3px; border:0.5px solid #cbd5e1;">PR</th><th style="padding:3px; border:0.5px solid #cbd5e1; width:30px;">Ort.</th></tr></thead><tbody>`;
+            let html = `<table style="width:100%; border-collapse:collapse; margin-top:4px; font-size:6.5pt;"><thead><tr style="background:#f1f5f9;"><th style="padding:2px; border:0.5px solid #cbd5e1; width:16px;">#</th><th style="padding:2px; border:0.5px solid #cbd5e1;">Adı Soyadı</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:24px;">No</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">1.Y</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">2.Y</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">3.Y</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">1.P</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">2.P</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">3.P</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">1.U</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">2.U</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:20px;">PR</th><th style="padding:2px; border:0.5px solid #cbd5e1; width:26px;">Ort.</th></tr></thead><tbody>`;
 
             state.students.filter(s => s.className === className).forEach((s, idx) => {
-                const grade = state.notes[`${s.id}_${courseId}`] || { y1: '-', y2: '-', p1: '-', p2: '-', pr: '-', avg: '-' };
-                html += `<tr><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${idx + 1}</td><td style="padding:3px; border:0.5px solid #e2e8f0;">${escapeHtml(s.firstName)} ${escapeHtml(s.lastName)}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(s.number)}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.y1 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.y2 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.p1 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.p2 || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0;">${escapeHtml(grade.pr || '-')}</td><td style="padding:3px; border:0.5px solid #e2e8f0; text-align:center; font-weight:bold;">${escapeHtml(grade.avg || '-')}</td></tr>`;
+                const grade = state.notes[`${s.id}_${courseId}`] || { y1: '-', y2: '-', y3: '-', p1: '-', p2: '-', p3: '-', u1: '-', u2: '-', pr: '-', avg: '-' };
+                html += `<tr><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${idx + 1}</td><td style="padding:2px; border:0.5px solid #e2e8f0;">${escapeHtml(s.firstName)} ${escapeHtml(s.lastName)}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(s.number)}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.y1 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.y2 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.y3 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.p1 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.p2 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.p3 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.u1 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.u2 || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center;">${escapeHtml(grade.pr || '-')}</td><td style="padding:2px; border:0.5px solid #e2e8f0; text-align:center; font-weight:bold;">${escapeHtml(grade.avg || '-')}</td></tr>`;
             });
             html += `</tbody></table>`;
             return { title, html, className };
